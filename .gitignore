@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment / Secrets
+backend/config.php
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary / test files
+tmp/
+test_probe.txt
+unique_test.txt
+*.zip
+
+# Logs
+*.log
+npm-debug.log*

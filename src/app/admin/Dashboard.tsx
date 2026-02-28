@@ -1,0 +1,82 @@
+import { Users, FileText, Calendar, TrendingUp } from 'lucide-react';
+
+export function Dashboard({ onNavigate }: { onNavigate: (page: string) => void }) {
+  const stats = [
+    { label: 'Projetos Ativos', value: '15', icon: FileText, color: 'text-blue-600', bg: 'bg-blue-100', link: 'projetos' },
+    { label: 'Eventos no Mês', value: '8', icon: Calendar, color: 'text-green-600', bg: 'bg-green-100', link: 'eventos' },
+    { label: 'Total de Alunos', value: '850+', icon: Users, color: 'text-purple-600', bg: 'bg-purple-100', link: '#' },
+    { label: 'Acessos Hoje', value: '124', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-100', link: '#' },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Bem-vindo ao Painel Administrativo</h1>
+        <p className="text-gray-500 mt-1">Gerencie o conteúdo do site da escola de forma simples e rápida.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <button 
+              key={index}
+              onClick={() => stat.link !== '#' && onNavigate(stat.link)}
+              className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-left w-full group"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`${stat.bg} p-3 rounded-lg group-hover:scale-110 transition-transform`}>
+                  <Icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+                <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
+              </div>
+              <p className="text-sm font-medium text-gray-600">{stat.label}</p>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Atalhos Rápidos */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Ações Rápidas</h2>
+          <div className="space-y-3">
+            <button 
+              onClick={() => onNavigate('media')}
+              className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100"
+            >
+              <span className="font-medium text-gray-700">Adicionar Fotos à Galeria</span>
+              <span className="text-[#2E7BA6] text-sm font-semibold">Upload</span>
+            </button>
+            <button 
+              onClick={() => onNavigate('eventos')}
+              className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100"
+            >
+              <span className="font-medium text-gray-700">Atualizar Calendário Escolar</span>
+              <span className="text-[#2E7BA6] text-sm font-semibold">Editar</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Dicas de UX */}
+        <div className="bg-[#2E7BA6]/5 p-6 rounded-xl border border-[#2E7BA6]/20">
+          <h2 className="text-lg font-bold text-[#2E7BA6] mb-4">Diretrizes do Painel</h2>
+          <ul className="space-y-3">
+            <li className="flex items-start gap-3 text-sm text-gray-600">
+              <span className="bg-[#2E7BA6] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+              <span>Use <strong>títulos claros e curtos</strong> para facilitar a leitura nos dispositivos móveis.</span>
+            </li>
+            <li className="flex items-start gap-3 text-sm text-gray-600">
+              <span className="bg-[#2E7BA6] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+              <span>Sempre revise as <strong>imagens</strong> antes de enviar. O tamanho ideal é abaixo de 2MB.</span>
+            </li>
+            <li className="flex items-start gap-3 text-sm text-gray-600">
+              <span className="bg-[#2E7BA6] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+              <span>Cuidado ao <strong>excluir</strong> itens. Esta ação não pode ser desfeita.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
