@@ -90,37 +90,6 @@ export function PlatformsPage() {
         </div>
 
 
-        {/* Seção Precisa de Ajuda */}
-        <section className="bg-primary rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Precisa de Ajuda?</h2>
-              <p className="text-primary-foreground/90 text-lg max-w-xl">
-                Se você está com dificuldades de acesso ou problemas técnicos nas plataformas, nossa secretaria está pronta para auxiliar.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href={`tel:${data.general.phone.replace(/\D/g, '')}`}
-                className="flex items-center justify-center gap-3 bg-white text-primary px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-lg min-w-[200px]"
-              >
-                <Phone className="w-5 h-5" />
-                Ligar Agora
-              </a>
-              <a 
-                href={`mailto:${data.general.emailSecretaria}`}
-                className="flex items-center justify-center gap-3 bg-primary-foreground/20 border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-foreground/30 transition-all shadow-lg min-w-[200px]"
-              >
-                <Mail className="w-5 h-5" />
-                Enviar E-mail
-              </a>
-            </div>
-          </div>
-          {/* Decorative shapes */}
-          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-black/10 rounded-full blur-3xl"></div>
-        </section>
-
       </div>
     </div>
   );
