@@ -1,27 +1,37 @@
-# Dependencies
 node_modules/
 
 # Build output
 dist/
 
+# Environment / Secret# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
 # Environment / Secrets
 backend/config.php
 
-# OS files
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-Thumbs.db
-desktop.ini
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# IDE
-.vscode/
-.idea/
-
-# Temporary / test files
-tmp/
-test_probe.txt
-unique_test.txt
-*.zip
-
-# Logs
-*.log
-npm-debug.log*
+# Pastas e arquivos sensíveis omitidos propositalmente
+backend/
+bd_script.sql
+novos_requisitos*
