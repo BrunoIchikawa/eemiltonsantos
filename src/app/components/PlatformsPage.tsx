@@ -89,57 +89,6 @@ export function PlatformsPage() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* Seção Ajuda e Tutoriais */}
-          <section className="bg-white rounded-2xl p-8 shadow-sm border border-border">
-            <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-              <PlayCircle className="w-6 h-6 text-secondary" />
-              Ajuda e Tutoriais
-            </h2>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/10 transition-colors cursor-pointer group">
-                <FileText className="w-5 h-5 text-muted-foreground group-hover:text-secondary" />
-                <div>
-                  <h4 className="font-bold text-foreground">Como acessar a SED?</h4>
-                  <p className="text-sm text-muted-foreground">Passo a passo para primeiro acesso e recuperação de senha.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/10 transition-colors cursor-pointer group">
-                <FileText className="w-5 h-5 text-muted-foreground group-hover:text-secondary" />
-                <div>
-                  <h4 className="font-bold text-foreground">Tutorial CMSP</h4>
-                  <p className="text-sm text-muted-foreground">Guia de instalação e uso do aplicativo.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/10 transition-colors cursor-pointer group">
-                <FileText className="w-5 h-5 text-muted-foreground group-hover:text-secondary" />
-                <div>
-                  <h4 className="font-bold text-foreground">Google Classroom</h4>
-                  <p className="text-sm text-muted-foreground">Como enviar atividades e falar com professores.</p>
-                </div>
-              </li>
-            </ul>
-          </section>
-
-          {/* Seção Informações Importantes */}
-          <section className="bg-white rounded-2xl p-8 shadow-sm border border-border">
-            <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-              <Info className="w-6 h-6 text-yellow-600" />
-              Informações Importantes
-            </h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                <strong className="text-foreground">RA (Registro do Aluno):</strong> O número do RA é essencial para acessar todas as plataformas estaduais. Ele pode ser consultado na secretaria ou no boletim escolar.
-              </p>
-              <p>
-                <strong className="text-foreground">Senhas:</strong> Recomendamos que a senha de acesso à SED seja atualizada periodicamente. A mesma senha é utilizada para o CMSP e e-mail institucional.
-              </p>
-              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-sm text-yellow-800 mt-4">
-                <strong>Atenção:</strong> Nunca compartilhe sua senha com terceiros. A escola não solicita senhas por telefone ou WhatsApp.
-              </div>
-            </div>
-          </section>
-        </div>
 
         {/* Seção Precisa de Ajuda */}
         <section className="bg-primary rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
