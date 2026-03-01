@@ -94,9 +94,9 @@ export function ProjectsPage() {
       {/* Standard Header */}
       <section className="bg-gradient-to-r from-[#00A650] to-[#609BA2] text-white py-12 sm:py-16 text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Nossos Projetos</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{data.general.pageBanners?.projetos?.title || 'Nossos Projetos'}</h1>
           <p className="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto">
-            Iniciativas que transformam a aprendizagem e engajam nossa comunidade.
+            {data.general.pageBanners?.projetos?.subtitle || 'Iniciativas que transformam a aprendizagem e engajam nossa comunidade.'}
           </p>
         </div>
       </section>

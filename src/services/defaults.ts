@@ -17,6 +17,22 @@ export const defaultData: SiteData = {
     socials: [
       { name: 'Facebook', url: '#', active: true },
       { name: 'Instagram', url: '#', active: true },
+    ],
+    pageBanners: {
+      sobre: { title: 'Sobre a Escola', subtitle: 'Conheça nossa história, missão e valores.' },
+      equipe: { title: 'Equipe Gestora', subtitle: 'Conheça os profissionais que administram nossa escola.' },
+      projetos: { title: 'Projetos Pedagógicos', subtitle: 'Iniciativas que transformam a teoria em prática.' },
+      eventos: { title: 'Eventos Gremistas e Escolares', subtitle: 'Acompanhe as atividades, feiras e comemorações da escola.' },
+      premios: { title: 'Prêmios e Conquistas', subtitle: 'Reconhecimento do talento e dedicação de nossos alunos e professores.' },
+      galeria: { title: 'Galeria de Fotos', subtitle: 'Momentos especiais da nossa comunidade escolar.' },
+      plataformas: { title: 'Plataformas Digitais', subtitle: 'Acesse rapidamente os sistemas e ferramentas de aprendizado da escola.' },
+      faq: { title: 'Perguntas Frequentes (FAQ)', subtitle: 'Tire suas dúvidas sobre matrículas, horários e rotina escolar.' },
+    },
+    organogram: [
+      { id: '1', role: 'Diretor', name: 'João Silva' },
+      { id: '2', role: 'Vice-Diretor', name: 'Maria Souza' },
+      { id: '3', role: 'Coordenador', name: 'Pedro Santos' },
+      { id: '4', role: 'Secretário', name: 'Ana Oliveira' },
     ]
   },
   home: {

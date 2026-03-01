@@ -25,9 +25,9 @@ export function AboutPage() {
       {/* Standard Header - Conforme Guidelines 2.1 */}
       <section className="bg-gradient-to-r from-[#609BA2] to-[#78D2F6] text-white py-12 sm:py-16 text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Sobre a E.E. Prof. Milton Santos</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{data.general.pageBanners?.sobre?.title || 'Sobre a E.E. Prof. Milton Santos'}</h1>
           <p className="text-lg sm:text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-            Uma instituição comprometida com a educação de qualidade há mais de 40 anos.
+            {data.general.pageBanners?.sobre?.subtitle || 'Uma instituição comprometida com a educação de qualidade há mais de 40 anos.'}
           </p>
         </div>
       </section>

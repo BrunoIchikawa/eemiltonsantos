@@ -143,9 +143,9 @@ export function CalendarPage() {
       {/* Standard Header */}
       <section className="bg-gradient-to-r from-[#00A650] to-[#609BA2] text-white py-12 sm:py-16 text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Calendário Escolar 2026</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{data.general.pageBanners?.eventos?.title || 'Calendário Escolar'}</h1>
           <p className="text-lg sm:text-xl opacity-90 mx-auto text-[25px] text-center">
-            Acompanhe as datas importantes, eventos, reuniões e feriados do ano letivo
+            {data.general.pageBanners?.eventos?.subtitle || 'Acompanhe as datas importantes, eventos, reuniões e feriados do ano letivo.'}
           </p>
         </div>
       </section>

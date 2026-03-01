@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { HelpCircle, ChevronDown, ChevronUp, Mail, Phone, MessageCircle } from 'lucide-react';
-import { useSiteData, FAQItem } from '../context/SiteContext';
+import { useSiteData } from '../context/SiteContext';
+import { FAQItem } from '../../types';
 
 export function FAQPage() {
   const { data } = useSiteData();
@@ -36,11 +37,10 @@ export function FAQPage() {
         <div className="mx-auto px-4">
           <div className="flex flex-col items-center justify-center gap-3 mb-4">
             <HelpCircle className="w-12 h-12 stroke-[1.5]" />
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Dúvidas Frequentes</h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">{data.general.pageBanners?.faq?.title || 'Dúvidas Frequentes'}</h1>
           </div>
-          <p className="text-lg sm:text-xl opacity-90 mx-auto font-normal leading-relaxed">
-            Encontre respostas para as perguntas mais comuns sobre documentação, 
-            vida escolar, plataformas digitais e muito mais.
+          <p className="text-lg sm:text-xl opacity-90 mx-auto font-normal leading-relaxed max-w-2xl">
+            {data.general.pageBanners?.faq?.subtitle || 'Encontre respostas para as perguntas mais comuns sobre documentação, vida escolar, plataformas digitais e muito mais.'}
           </p>
         </div>
       </section>

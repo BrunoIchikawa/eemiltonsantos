@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Calendar, MapPin, Lightbulb, Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageWithFallback } from './ui_elements/ImageWithFallback';
-import { useSiteData, GalleryAlbum } from '../context/SiteContext';
+import { useSiteData } from '../context/SiteContext';
+import { GalleryAlbum } from '../../types';
 
 export function GalleryPage() {
   const { data } = useSiteData();
@@ -92,7 +93,7 @@ export function GalleryPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {selectedAlbum.images.map((photo, index) => (
+              {selectedAlbum.images.map((photo: string, index: number) => (
                 <button
                   key={index}
                   onClick={() => openLightbox(index)}
@@ -158,9 +159,9 @@ export function GalleryPage() {
       {/* Standard Header */}
       <section className="bg-gradient-to-r from-[#705741] to-[#A88F71] text-white py-12 sm:py-16 text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Galeria</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{data.general.pageBanners?.galeria?.title || 'Galeria'}</h1>
           <p className="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto">
-            Acompanhe os melhores momentos da nossa escola através de imagens.
+            {data.general.pageBanners?.galeria?.subtitle || 'Acompanhe os melhores momentos da nossa escola através de imagens.'}
           </p>
         </div>
       </section>

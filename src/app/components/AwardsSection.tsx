@@ -16,9 +16,9 @@ export function AwardsSection() {
           <div className="inline-flex items-center justify-center p-3 bg-yellow-100 rounded-full mb-4">
             <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-600" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Nossas Conquistas</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{data.general.pageBanners?.premios?.title || 'Nossas Conquistas'}</h2>
           <p className="text-base sm:text-lg text-gray-600 mt-2 max-w-2xl mx-auto">
-            Reconhecimento do nosso compromisso com a excelência educacional e o desenvolvimento dos nossos alunos.
+            {data.general.pageBanners?.premios?.subtitle || 'Reconhecimento do nosso compromisso com a excelência educacional e o desenvolvimento dos nossos alunos.'}
           </p>
         </div>
 

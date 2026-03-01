@@ -29,9 +29,9 @@ export function PlatformsPage() {
       {/* Standard Header */}
       <section className="bg-gradient-to-r from-[#32C5F4] to-[#78D2F6] text-white py-12 sm:py-16 text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Plataformas Digitais</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{data.general.pageBanners?.plataformas?.title || 'Plataformas Digitais'}</h1>
           <p className="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto">
-            Acesse rapidamente os sistemas e ferramentas de aprendizado da escola.
+            {data.general.pageBanners?.plataformas?.subtitle || 'Acesse rapidamente os sistemas e ferramentas de aprendizado da escola.'}
           </p>
         </div>
       </section>
