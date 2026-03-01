@@ -139,7 +139,7 @@ export function ContentManager({ section }: ContentManagerProps) {
 
   const handleDelete = (id: string) => {
     if (confirm('Tem certeza que deseja excluir este item?')) {
-      const updated = config.items.filter((i: any) => i.id !== id);
+      const updated = config.items.filter((i: any) => String(i.id) !== String(id));
       config.updateFn(updated as any);
       toast.success('Item removido com sucesso!');
     }

@@ -61,7 +61,7 @@ export function PopupManager() {
 
   const handleDelete = (id: string) => {
     if (confirm('Tem certeza que deseja excluir este aviso?')) {
-      const newPopups = data.popups.filter(p => p.id !== id);
+      const newPopups = data.popups.filter(p => String(p.id) !== String(id));
       updatePopups(newPopups);
     }
   };

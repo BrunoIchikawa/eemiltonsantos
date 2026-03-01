@@ -74,7 +74,7 @@ export function TeamManager() {
 
   const handleDelete = (id: string) => {
     if (confirm('Tem certeza que deseja remover este membro da equipe?')) {
-      const updated = members.filter(m => m.id !== id);
+      const updated = members.filter(m => String(m.id) !== String(id));
       setMembers(updated);
       updateTeam(updated);
       toast.success('Membro removido com sucesso!');

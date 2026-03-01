@@ -70,7 +70,7 @@ export function GalleryManager() {
 
   const handleDelete = (id: string) => {
     if (confirm('Tem certeza que deseja excluir este álbum?')) {
-      updateGallery(data.gallery.filter(g => g.id !== id));
+      updateGallery(data.gallery.filter(g => String(g.id) !== String(id)));
       toast.success('Álbum excluído.');
     }
   };

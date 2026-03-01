@@ -29,7 +29,7 @@ export function FAQManager() {
 
   const handleDelete = (id: string) => {
     if (confirm('Excluir esta pergunta?')) {
-      const updated = faqItems.filter(i => i.id !== id);
+      const updated = faqItems.filter(i => String(i.id) !== String(id));
       setFaqItems(updated);
       updateFAQ(updated);
       toast.success('Pergunta removida!');

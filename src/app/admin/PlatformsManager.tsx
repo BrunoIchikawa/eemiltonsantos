@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useSiteData, Platform } from '../context/SiteContext';
+import { useSiteData } from '../context/SiteContext';
+import { Platform } from '../../types';
 import { Plus, Edit2, Trash2, Save, X, Link as LinkIcon, ExternalLink, Monitor } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -28,7 +29,7 @@ export function PlatformsManager() {
 
   const handleDelete = (id: string) => {
     if (confirm('Tem certeza que deseja excluir esta plataforma?')) {
-      const updated = platforms.filter(p => p.id !== id);
+      const updated = platforms.filter(p => String(p.id) !== String(id));
       setPlatforms(updated);
       updatePlatforms(updated);
       toast.success('Plataforma removida com sucesso!');

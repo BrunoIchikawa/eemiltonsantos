@@ -82,7 +82,7 @@ export function SliderManager() {
 
   const handleDelete = (id: string) => {
     if (confirm('Tem certeza que deseja excluir este slide?')) {
-      const newSlides = slides.filter((s: Slide) => s.id !== id);
+      const newSlides = slides.filter((s: Slide) => String(s.id) !== String(id));
       updateSlides(newSlides);
       toast.success('Slide excluído com sucesso!');
     }
