@@ -164,13 +164,13 @@ export function Footer() {
                   </div>
                   <div className="text-sm text-blue-100">
                     {general.whatsapp && (
-                      <a href={`https://wa.me/55${general.whatsapp.replace(/\D/g, '')}`} className="block hover:text-white transition-colors mb-1 font-medium">
-                        {general.whatsapp} (WhatsApp)
+                      <a href={`https://wa.me/55${general.whatsapp.replace(/\D/g, '')}`} className="block hover:text-white transition-colors mb-3 font-medium">
+                        {general.whatsapp} <span className="text-xs text-emerald-400 font-normal block mt-0.5">(WhatsApp / Ligação)</span>
                       </a>
                     )}
                     {general.phone && (
-                      <a href={`tel:${general.phone.replace(/\D/g, '')}`} className="block text-blue-200 hover:text-white transition-colors">
-                        {general.phone}
+                      <a href={`https://wa.me/55${general.phone.replace(/\D/g, '')}`} className="block text-blue-200 hover:text-white transition-colors">
+                        {general.phone} <span className="text-xs text-emerald-400 font-normal block mt-0.5">(WhatsApp / Ligação)</span>
                       </a>
                     )}
                   </div>
