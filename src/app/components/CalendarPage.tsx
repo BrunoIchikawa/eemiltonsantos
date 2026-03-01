@@ -72,7 +72,17 @@ export function CalendarPage() {
 
   const handleDayClick = (day: number) => {
     const dateStr = `${String(day).padStart(2, '0')}/${String(currentMonth.getMonth() + 1).padStart(2, '0')}/${currentMonth.getFullYear()}`;
-    const eventsOnDay = activeEvents.filter((e: Event) => e.date === dateStr);
+    const parseDate = (d: string) => {
+      const p = d.split('/');
+      return new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+    };
+    const dayDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    
+    const eventsOnDay = activeEvents.filter((e: Event) => {
+      const startDate = parseDate(e.date);
+      const endDate = e.endDate ? parseDate(e.endDate) : startDate;
+      return dayDate >= startDate && dayDate <= endDate;
+    });
 
     if (eventsOnDay.length > 0) {
       setSelectedDateEvents({ date: dateStr, events: eventsOnDay });
