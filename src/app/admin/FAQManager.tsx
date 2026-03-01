@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useSiteData, FAQItem } from '../context/SiteContext';
+import { useSiteData } from '../context/SiteContext';
+import { FAQItem } from '../../types';
 import { Plus, Edit2, Trash2, Save, X, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -147,13 +148,21 @@ export function FAQManager() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                <input
-                  type="text"
+                <select
                   value={editingItem.category}
                   onChange={(e) => setEditingItem({...editingItem, category: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
-                  placeholder="Ex: Matrícula, Documentação..."
-                />
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6] bg-white"
+                >
+                  <option value="Geral">Geral</option>
+                  <option value="Sala do Futuro">Sala do Futuro</option>
+                  <option value="Matrícula">Matrícula</option>
+                  <option value="Documentação">Documentação</option>
+                  <option value="Transporte">Transporte</option>
+                  <option value="Alimentação">Alimentação</option>
+                  <option value="Uniforme">Uniforme</option>
+                  <option value="Pedagógico">Pedagógico</option>
+                  <option value="Administrativo">Administrativo</option>
+                </select>
               </div>
 
               <div className="flex justify-end gap-3 mt-6">

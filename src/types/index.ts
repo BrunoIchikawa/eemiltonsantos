@@ -44,10 +44,11 @@ export interface Event {
   id: string;
   title: string;
   date: string;
+  endDate?: string;
   startTime?: string;
   endTime?: string;
   description: string;
-  category: string;
+  category?: string;
   audience?: string;
   active: boolean;
 }

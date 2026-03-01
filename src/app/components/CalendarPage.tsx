@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Calendar as CalendarIcon, Clock, Plus, ChevronLeft, ChevronRight, Users, User, Info, X } from 'lucide-react';
-import { useSiteData, Event } from '../context/SiteContext';
+import { useSiteData } from '../context/SiteContext';
+import { Event } from '../../types';
 
 export function CalendarPage() {
   const { data } = useSiteData();
@@ -90,7 +91,17 @@ export function CalendarPage() {
 
       const dateStr = `${String(i).padStart(2, '0')}/${String(currentMonth.getMonth() + 1).padStart(2, '0')}/${currentMonth.getFullYear()}`;
 
-      const dayEvents = activeEvents.filter((e: Event) => e.date === dateStr);
+      const dayEvents = activeEvents.filter((e: Event) => {
+        // Checa se o dia está dentro do range do evento
+        const parseDate = (d: string) => {
+          const p = d.split('/');
+          return new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+        };
+        const dayDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i);
+        const startDate = parseDate(e.date);
+        const endDate = e.endDate ? parseDate(e.endDate) : startDate;
+        return dayDate >= startDate && dayDate <= endDate;
+      });
       const hasEvent = dayEvents.length > 0;
 
       days.push(

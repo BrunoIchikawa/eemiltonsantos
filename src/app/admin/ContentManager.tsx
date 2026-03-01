@@ -97,10 +97,10 @@ export function ContentManager({ section }: ContentManagerProps) {
         emptyItem: {
           id: '',
           title: '',
-          date: '', // Will be filled with mask
+          date: '',
+          endDate: '',
           description: '',
-          category: 'Geral',
-          audience: 'Geral', // Default audience
+          audience: 'Geral',
           active: true
         } as Event
       };
@@ -419,6 +419,15 @@ export function ContentManager({ section }: ContentManagerProps) {
                         />
                       </div>
                       <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Data de Término <span className="text-xs text-gray-400">(opcional)</span></label>
+                        <input
+                          type="date"
+                          value={formatDateForInput(editingItem.endDate || '')}
+                          onChange={(e) => setEditingItem({ ...editingItem, endDate: formatDateForStorage(e.target.value) })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7BA6] outline-none [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:p-1 [&::-webkit-calendar-picker-indicator]:hover:bg-gray-100 [&::-webkit-calendar-picker-indicator]:rounded-full"
+                        />
+                      </div>
+                      <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Hora de Início</label>
                         <input
                           type="time"
@@ -454,6 +463,7 @@ export function ContentManager({ section }: ContentManagerProps) {
                   </>
                 )}
 
+                {section !== 'eventos' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
                   <input
@@ -464,6 +474,7 @@ export function ContentManager({ section }: ContentManagerProps) {
                     placeholder={section === 'premios' ? 'Ex: Acadêmico, Esportivo' : 'Categoria...'}
                   />
                 </div>
+                )}
 
                 <div className="col-span-full">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
