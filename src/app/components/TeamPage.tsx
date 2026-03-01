@@ -28,17 +28,11 @@ export function TeamPage() {
           </h2>
           <div className="max-w-4xl mx-auto">
             {data.general.organogram && data.general.organogram.length > 0 ? (
-              <div className="flex flex-col items-center">
-                {data.general.organogram.map((block, index) => (
-                  <div key={block.id} className="w-full flex flex-col items-center">
-                    <div className="bg-primary text-primary-foreground px-6 py-4 rounded-lg shadow-lg text-center min-w-[250px] max-w-md">
-                      <div className="font-bold text-lg">{block.role}</div>
-                      <div className="text-sm opacity-90 mt-1">{block.name}</div>
-                    </div>
-                    {/* Linha de Conexão, não renderiza no último */}
-                    {index < data.general.organogram!.length - 1 && (
-                      <div className="w-0.5 h-8 bg-border my-4"></div>
-                    )}
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+                {data.general.organogram.map((block) => (
+                  <div key={block.id} className="bg-primary text-primary-foreground px-6 py-4 rounded-lg shadow-lg text-center flex-1 min-w-[200px] max-w-[300px] border border-primary/20 hover:scale-105 transition-transform duration-200">
+                    <div className="font-bold text-lg">{block.role}</div>
+                    <div className="text-sm opacity-90 mt-2 p-2 bg-black/10 rounded-md">{block.name}</div>
                   </div>
                 ))}
               </div>
