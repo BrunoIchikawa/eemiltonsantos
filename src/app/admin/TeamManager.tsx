@@ -149,10 +149,6 @@ export function TeamManager() {
               <h3 className="font-bold text-lg text-gray-900">{member.name}</h3>
               <p className="text-[#2E7BA6] font-medium text-sm mb-2">{member.role}</p>
               <p className="text-gray-500 text-sm line-clamp-2 mb-4">{member.description}</p>
-              <div className="space-y-1 text-xs text-gray-400">
-                <p>{member.email}</p>
-                <p>{member.phone}</p>
-              </div>
             </div>
           </div>
         ))}
