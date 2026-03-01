@@ -1,11 +1,28 @@
-import { Users, FileText, Calendar, TrendingUp } from 'lucide-react';
+import { useSiteData } from '../context/SiteContext';
+import { FileText, Calendar, Image, HelpCircle, Users, Layers, Award, MessageSquare } from 'lucide-react';
 
 export function Dashboard({ onNavigate }: { onNavigate: (page: string) => void }) {
+  const { data } = useSiteData();
+
+  // Contadores dinâmicos
+  const projectCount = data.projects?.length || 0;
+  const eventCount = data.events?.length || 0;
+  const mediaCount = data.media?.length || 0;
+  const faqCount = data.faq?.length || 0;
+  const teamCount = data.team?.length || 0;
+  const slideCount = data.slides?.length || 0;
+  const awardCount = data.awards?.length || 0;
+  const popupCount = data.popups?.length || 0;
+
   const stats = [
-    { label: 'Projetos Ativos', value: '15', icon: FileText, color: 'text-blue-600', bg: 'bg-blue-100', link: 'projetos' },
-    { label: 'Eventos no Mês', value: '8', icon: Calendar, color: 'text-green-600', bg: 'bg-green-100', link: 'eventos' },
-    { label: 'Total de Alunos', value: '850+', icon: Users, color: 'text-purple-600', bg: 'bg-purple-100', link: '#' },
-    { label: 'Acessos Hoje', value: '124', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-100', link: '#' },
+    { label: 'Projetos', value: projectCount.toString(), icon: FileText, color: 'text-blue-600', bg: 'bg-blue-100', link: 'projetos' },
+    { label: 'Eventos', value: eventCount.toString(), icon: Calendar, color: 'text-green-600', bg: 'bg-green-100', link: 'eventos' },
+    { label: 'Mídias', value: mediaCount.toString(), icon: Image, color: 'text-purple-600', bg: 'bg-purple-100', link: 'media' },
+    { label: 'Equipe', value: teamCount.toString(), icon: Users, color: 'text-orange-600', bg: 'bg-orange-100', link: 'equipe' },
+    { label: 'Prêmios', value: awardCount.toString(), icon: Award, color: 'text-yellow-600', bg: 'bg-yellow-100', link: 'premios' },
+    { label: 'FAQ', value: faqCount.toString(), icon: HelpCircle, color: 'text-cyan-600', bg: 'bg-cyan-100', link: 'faq' },
+    { label: 'Slides', value: slideCount.toString(), icon: Layers, color: 'text-indigo-600', bg: 'bg-indigo-100', link: 'slides' },
+    { label: 'Pop-ups', value: popupCount.toString(), icon: MessageSquare, color: 'text-pink-600', bg: 'bg-pink-100', link: 'popups' },
   ];
 
   return (
@@ -15,18 +32,18 @@ export function Dashboard({ onNavigate }: { onNavigate: (page: string) => void }
         <p className="text-gray-500 mt-1">Gerencie o conteúdo do site da escola de forma simples e rápida.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <button 
               key={index}
               onClick={() => stat.link !== '#' && onNavigate(stat.link)}
-              className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-left w-full group"
+              className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-left w-full group"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`${stat.bg} p-3 rounded-lg group-hover:scale-110 transition-transform`}>
-                  <Icon className={`w-6 h-6 ${stat.color}`} />
+              <div className="flex items-center justify-between mb-3">
+                <div className={`${stat.bg} p-2.5 rounded-lg group-hover:scale-110 transition-transform`}>
+                  <Icon className={`w-5 h-5 ${stat.color}`} />
                 </div>
                 <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
               </div>
@@ -55,10 +72,17 @@ export function Dashboard({ onNavigate }: { onNavigate: (page: string) => void }
               <span className="font-medium text-gray-700">Atualizar Calendário Escolar</span>
               <span className="text-[#2E7BA6] text-sm font-semibold">Editar</span>
             </button>
+            <button 
+              onClick={() => onNavigate('home')}
+              className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-100"
+            >
+              <span className="font-medium text-gray-700">Editar Página Inicial</span>
+              <span className="text-[#2E7BA6] text-sm font-semibold">Editar</span>
+            </button>
           </div>
         </div>
 
-        {/* Dicas de UX */}
+        {/* Dicas */}
         <div className="bg-[#2E7BA6]/5 p-6 rounded-xl border border-[#2E7BA6]/20">
           <h2 className="text-lg font-bold text-[#2E7BA6] mb-4">Diretrizes do Painel</h2>
           <ul className="space-y-3">

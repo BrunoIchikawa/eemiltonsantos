@@ -92,8 +92,7 @@ export function Footer() {
                   <Clock className="w-5 h-5 text-[#0099DD] mt-0.5 flex-shrink-0" />
                   <div>
                     <h3 className="text-sm font-semibold text-white mb-1">Horário de Atendimento</h3>
-                    <p className="text-sm text-blue-100">Segunda a Sexta</p>
-                    <p className="text-sm text-white font-medium">07:00 às 17:00</p>
+                    <p className="text-sm text-blue-100">{general.businessHours || 'Segunda a Sexta: 07:00 às 17:00'}</p>
                   </div>
                 </div>
               </div>
@@ -160,16 +159,18 @@ export function Footer() {
                 </a>
 
                 <div className="flex items-center gap-3 group">
-                  <div className="bg-white/10 p-2 rounded-lg group-hover:bg-[#009B3A] transition-colors duration-300">
+                  <div className="bg-white/10 p-2 rounded-lg group-hover:bg-[#25D366] transition-colors duration-300">
                     <Phone className="w-5 h-5 text-blue-100 group-hover:text-white" />
                   </div>
                   <div className="text-sm text-blue-100">
-                    <a href={`tel:${general.phone.replace(/\D/g, '')}`} className="block hover:text-white transition-colors mb-1">
-                      {general.phone}
-                    </a>
                     {general.whatsapp && (
-                      <a href={`https://wa.me/${general.whatsapp.replace(/\D/g, '')}`} className="block text-blue-200 hover:text-white transition-colors">
+                      <a href={`https://wa.me/55${general.whatsapp.replace(/\D/g, '')}`} className="block hover:text-white transition-colors mb-1 font-medium">
                         {general.whatsapp} (WhatsApp)
+                      </a>
+                    )}
+                    {general.phone && (
+                      <a href={`tel:${general.phone.replace(/\D/g, '')}`} className="block text-blue-200 hover:text-white transition-colors">
+                        {general.phone}
                       </a>
                     )}
                   </div>

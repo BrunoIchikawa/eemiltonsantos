@@ -14,6 +14,7 @@ export interface GeneralSettings {
   mapUrl: string;
   socials: SocialLink[];
   footerText: string;
+  businessHours?: string;
 }
 
 export interface TeamMember {
@@ -21,8 +22,8 @@ export interface TeamMember {
   name: string;
   role: string;
   photo: string;
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
   description: string;
 }
 

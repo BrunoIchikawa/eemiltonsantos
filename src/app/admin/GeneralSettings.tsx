@@ -123,7 +123,7 @@ export function GeneralSettings() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Telefone Principal</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp 1</label>
               <input
                 type="tel"
                 value={formData.phone}
@@ -165,6 +165,17 @@ export function GeneralSettings() {
                   className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
                 />
               </div>
+            </div>
+            <div className="col-span-full">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Horário de Atendimento</label>
+              <input
+                type="text"
+                value={formData.businessHours || ''}
+                onChange={(e) => handleChange('businessHours', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Ex: Segunda a Sexta: 07:00 às 17:00"
+              />
+              <p className="text-xs text-gray-400 mt-1">Exibido no rodapé do site</p>
             </div>
           </div>
         </div>
