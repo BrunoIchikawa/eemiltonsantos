@@ -236,28 +236,6 @@ export function TeamManager() {
                       required
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                      <input
-                        type="email"
-                        value={editingMember.email}
-                        onChange={(e) => setEditingMember({ ...editingMember, email: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
-                        placeholder="exemplo@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                      <input
-                        type="tel"
-                        value={editingMember.phone}
-                        onChange={(e) => setEditingMember({ ...editingMember, phone: formatPhone(e.target.value) })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
-                        placeholder="(11) 99999-9999"
-                      />
-                    </div>
-                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Minibiografia</label>
                     <textarea

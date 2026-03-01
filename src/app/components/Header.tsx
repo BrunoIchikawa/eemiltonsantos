@@ -114,7 +114,7 @@ export function Header({ currentPage }: HeaderProps) {
                   E.E. Prof. Milton Santos
                 </h1>
                 <p className={`text-[10px] sm:text-xs uppercase tracking-wider font-medium opacity-80 group-hover:opacity-100`}>
-                  Ensino Integral
+                  Unidade Regional de Ensino Norte 1
                 </p>
               </div>
             </button>

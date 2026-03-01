@@ -1,4 +1,4 @@
-import { Mail, Phone } from 'lucide-react';
+
 import { ImageWithFallback } from './ui_elements/ImageWithFallback';
 import { useSiteData } from '../context/SiteContext';
 
@@ -91,25 +91,9 @@ export function TeamPage() {
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-1">{member.name}</h3>
                     <div className="text-primary font-semibold mb-3">{member.role}</div>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-sm text-muted-foreground">
                       {member.description}
                     </p>
-                    <div className="space-y-2">
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                        <span className="text-xs sm:text-sm break-all">{member.email}</span>
-                      </a>
-                      <a
-                        href={`tel:${member.phone.replace(/\D/g, '')}`}
-                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        <span>{member.phone}</span>
-                      </a>
-                    </div>
                   </div>
                 </div>
               ))}

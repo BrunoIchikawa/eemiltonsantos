@@ -139,7 +139,7 @@ export function Footer() {
             </div>
 
             {/* Coluna 3: Contato */}
-            <div>
+            <div className="lg:col-span-1">
               <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <span className="w-1 h-6 bg-[#705741] rounded-full"></span>
                 Fale Conosco
@@ -239,9 +239,9 @@ export function Footer() {
                 <p className="text-sm font-medium text-white">
                   © {currentYear} {general.schoolName}
                 </p>
-                <p className="text-xs text-blue-200 mt-1">
+                <a href="https://www.educacao.sp.gov.br/" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-200 mt-1 hover:text-white transition-colors">
                   Governo do Estado de São Paulo - Secretaria da Educação
-                </p>
+                </a>
               </div>
               <div className="flex items-center gap-6">
                 <div className="flex flex-wrap justify-center gap-6 text-xs text-blue-200">

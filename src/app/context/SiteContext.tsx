@@ -115,93 +115,90 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     loadAllData();
   }, []);
 
-  // Wrappers for services
-  // Note: We don't await these in the UI handlers to keep UI responsive, 
-  // but we update local state immediately (optimistic update) or after promise resolves.
-  // Here we update state AFTER promise resolves to ensure backend consistency.
+  // Optimistic updates: atualiza UI imediatamente e sincroniza com backend em paralelo
 
   const updateGeneral = (s: Partial<GeneralSettings>) => {
-    generalService.updateSettings(s).then(updated => {
-      setData(prev => ({ ...prev, general: updated }));
-      toast.success("Configurações salvas");
-    }).catch(() => toast.error("Erro ao atualizar configurações"));
+    setData(prev => ({ ...prev, general: { ...prev.general, ...s } }));
+    generalService.updateSettings(s)
+      .then(() => toast.success("Configurações salvas"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateTeam = (t: TeamMember[]) => {
-    generalService.updateTeam(t).then(updated => {
-      setData(prev => ({ ...prev, team: updated }));
-      toast.success("Equipe atualizada");
-    }).catch(() => toast.error("Erro ao atualizar equipe"));
+    setData(prev => ({ ...prev, team: t }));
+    generalService.updateTeam(t)
+      .then(() => toast.success("Equipe atualizada"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateProjects = (p: Project[]) => {
-    projectService.update(p).then(updated => {
-      setData(prev => ({ ...prev, projects: updated }));
-      toast.success("Projetos atualizados");
-    }).catch(() => toast.error("Erro ao atualizar projetos"));
+    setData(prev => ({ ...prev, projects: p }));
+    projectService.update(p)
+      .then(() => toast.success("Projetos atualizados"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateEvents = (evt: Event[]) => {
-    eventService.update(evt).then(updated => {
-      setData(prev => ({ ...prev, events: updated }));
-      toast.success("Eventos atualizados");
-    }).catch(() => toast.error("Erro ao atualizar eventos"));
+    setData(prev => ({ ...prev, events: evt }));
+    eventService.update(evt)
+      .then(() => toast.success("Eventos atualizados"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateAwards = (awards: Award[]) => {
-    generalService.updateAwards(awards).then(updated => {
-      setData(prev => ({ ...prev, awards: updated }));
-      toast.success("Prêmios atualizados");
-    }).catch(() => toast.error("Erro ao atualizar prêmios"));
+    setData(prev => ({ ...prev, awards }));
+    generalService.updateAwards(awards)
+      .then(() => toast.success("Prêmios atualizados"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateAbout = (a: Partial<AboutSection>) => {
-    generalService.updateAbout(a).then(updated => {
-      setData(prev => ({ ...prev, about: updated }));
-      toast.success("Seção Sobre atualizada");
-    }).catch(() => toast.error("Erro ao atualizar sobre"));
+    setData(prev => ({ ...prev, about: { ...prev.about, ...a } }));
+    generalService.updateAbout(a)
+      .then(() => toast.success("Seção Sobre atualizada"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updatePlatforms = (plt: Platform[]) => {
-    generalService.updatePlatforms(plt).then(updated => {
-      setData(prev => ({ ...prev, platforms: updated }));
-      toast.success("Plataformas atualizadas");
-    }).catch(() => toast.error("Erro ao atualizar plataformas"));
+    setData(prev => ({ ...prev, platforms: plt }));
+    generalService.updatePlatforms(plt)
+      .then(() => toast.success("Plataformas atualizadas"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateFAQ = (f: FAQItem[]) => {
-    faqService.update(f).then(updated => {
-      setData(prev => ({ ...prev, faq: updated }));
-      toast.success("FAQ atualizado");
-    }).catch(() => toast.error("Erro ao atualizar FAQ"));
+    setData(prev => ({ ...prev, faq: f }));
+    faqService.update(f)
+      .then(() => toast.success("FAQ atualizado"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateGallery = (g: GalleryAlbum[]) => {
-    galleryService.update(g).then(updated => {
-      setData(prev => ({ ...prev, gallery: updated }));
-      toast.success("Galeria atualizada");
-    }).catch(() => toast.error("Erro ao atualizar galeria"));
+    setData(prev => ({ ...prev, gallery: g }));
+    galleryService.update(g)
+      .then(() => toast.success("Galeria atualizada"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateHome = (h: Partial<HomeData>) => {
-    homeService.update(h).then(updated => {
-      setData(prev => ({ ...prev, home: updated }));
-      toast.success("Home atualizada");
-    }).catch(() => toast.error("Erro ao atualizar Home"));
+    setData(prev => ({ ...prev, home: { ...prev.home, ...h } }));
+    homeService.update(h)
+      .then(() => toast.success("Home atualizada"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updateSlides = (s: Slide[]) => {
-    generalService.updateSlides(s).then(updated => {
-      setData(prev => ({ ...prev, slides: updated }));
-      toast.success("Slides atualizados");
-    }).catch(() => toast.error("Erro ao atualizar slides"));
+    setData(prev => ({ ...prev, slides: s }));
+    generalService.updateSlides(s)
+      .then(() => toast.success("Slides atualizados"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   const updatePopups = (popups: Popup[]) => {
-    generalService.updatePopups(popups).then(updated => {
-      setData(prev => ({ ...prev, popups: updated }));
-      toast.success("Popups atualizados");
-    }).catch(() => toast.error("Erro ao atualizar popups"));
+    setData(prev => ({ ...prev, popups }));
+    generalService.updatePopups(popups)
+      .then(() => toast.success("Popups atualizados"))
+      .catch(() => toast.error("Erro ao salvar no servidor"));
   };
 
   // Legacy support - keeps accepting MediaItem for compatibility
