@@ -26,7 +26,7 @@ export function TeamPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8 text-center">
             Estrutura Organizacional
           </h2>
-          <div className="w-full overflow-x-auto pb-8">
+          <div className="w-full pb-8">
             {data.general.organogram && data.general.organogram.length > 0 ? (
               (() => {
                 type OrgNode = { id: string; role: string; name: string; parentId?: string | null };
@@ -34,14 +34,13 @@ export function TeamPage() {
 
                 const NODE_W = 170;
                 const NODE_H = 80;
-                const GAP_X = 16;
+                const GAP_X = 20;
                 const GAP_Y = 50;
-                const PAD = 20;
+                const PAD = 30;
 
                 const getChildren = (parentId: string | null): OrgNode[] =>
                   allNodes.filter(n => (n.parentId || null) === parentId);
 
-                // Pass 1: calculate subtree widths bottom-up
                 const subtreeWidthCache = new Map<string, number>();
                 const getSubtreeWidth = (nodeId: string): number => {
                   if (subtreeWidthCache.has(nodeId)) return subtreeWidthCache.get(nodeId)!;
@@ -58,7 +57,6 @@ export function TeamPage() {
                   return w;
                 };
 
-                // Pass 2: position each node. x = left edge of subtree region
                 const positioned: { x: number; y: number; node: OrgNode }[] = [];
                 const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
 
@@ -66,7 +64,6 @@ export function TeamPage() {
                   const node = allNodes.find(n => n.id === nodeId);
                   if (!node) return;
                   const regionW = getSubtreeWidth(nodeId);
-                  // Center the node box within its region
                   const nodeX = regionLeft + (regionW - NODE_W) / 2;
                   positioned.push({ x: nodeX, y, node });
 
@@ -75,7 +72,6 @@ export function TeamPage() {
 
                   const childY = y + NODE_H + GAP_Y;
                   let childLeft = regionLeft;
-                  // If children total width < regionW, center them
                   const childrenTotalW = children.reduce((s, c) => s + getSubtreeWidth(c.id), 0)
                     + GAP_X * (children.length - 1);
                   if (childrenTotalW < regionW) {
@@ -102,16 +98,14 @@ export function TeamPage() {
                   });
                 };
 
-                // Layout roots side by side
                 const roots = getChildren(null);
                 let currentLeft = PAD;
                 roots.forEach(root => {
-                  getSubtreeWidth(root.id); // ensure cache
+                  getSubtreeWidth(root.id);
                   layout(root.id, currentLeft, PAD);
                   currentLeft += getSubtreeWidth(root.id) + GAP_X;
                 });
 
-                // Calculate SVG size from actual positions
                 const svgW = positioned.length > 0
                   ? Math.max(...positioned.map(n => n.x + NODE_W)) + PAD
                   : 400;
@@ -121,11 +115,10 @@ export function TeamPage() {
 
                 return (
                   <svg
-                    width={svgW}
-                    height={svgH}
                     viewBox={`0 0 ${svgW} ${svgH}`}
-                    className="mx-auto block"
-                    style={{ minWidth: svgW }}
+                    preserveAspectRatio="xMidYMin meet"
+                    className="w-full h-auto block"
+                    style={{ maxHeight: '80vh' }}
                   >
                     {/* Connection lines */}
                     {lines.map((l, i) => {
