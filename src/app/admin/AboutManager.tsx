@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
+import { PageBannerEditor } from './components/PageBannerEditor';
 
 export function AboutManager() {
   const { data, updateAbout, uploadFile, deleteMedia } = useSiteData();
@@ -139,6 +140,7 @@ export function AboutManager() {
 
   return (
     <div className="space-y-6 pb-20">
+      <PageBannerEditor pageKey="sobre" label="Sobre a Escola" />
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Gerenciar Página Sobre</h1>
         <p className="text-gray-500">Edite todos os conteúdos exibidos na página "Sobre a Escola".</p>

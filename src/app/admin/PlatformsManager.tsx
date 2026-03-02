@@ -4,6 +4,7 @@ import { Platform } from '../../types';
 import { Plus, Edit2, Trash2, Save, X, Link as LinkIcon, ExternalLink, Monitor } from 'lucide-react';
 import { toast } from 'sonner';
 import { useConfirm } from './components/ConfirmDialog';
+import { PageBannerEditor } from './components/PageBannerEditor';
 
 export function PlatformsManager() {
   const { data, updatePlatforms } = useSiteData();
@@ -59,6 +60,7 @@ export function PlatformsManager() {
 
   return (
     <div className="space-y-6">
+      <PageBannerEditor pageKey="plataformas" label="Plataformas" />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Gerenciar Plataformas</h1>

@@ -145,7 +145,7 @@ export function Footer() {
               </h3>
               <div className="space-y-4">
                 <a
-                  href={general.mapUrl}
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(general.address || '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 group"

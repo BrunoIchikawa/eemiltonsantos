@@ -7,6 +7,7 @@ import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
 import { useConfirm } from './components/ConfirmDialog';
+import { PageBannerEditor } from './components/PageBannerEditor';
 
 interface ContentManagerProps {
   section: 'projetos' | 'eventos' | 'premios';
@@ -193,6 +194,12 @@ export function ContentManager({ section }: ContentManagerProps) {
 
   return (
     <div className="space-y-6 pb-20">
+      {section !== 'premios' && (
+        <PageBannerEditor
+          pageKey={section}
+          label={section === 'projetos' ? 'Projetos' : 'Eventos'}
+        />
+      )}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{config.title}</h1>

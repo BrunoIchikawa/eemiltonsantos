@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
 import { useConfirm } from './components/ConfirmDialog';
+import { PageBannerEditor } from './components/PageBannerEditor';
 
 export function GalleryManager() {
   const { data, updateGallery, uploadFile, deleteMedia } = useSiteData();
@@ -262,6 +263,7 @@ export function GalleryManager() {
 
   return (
     <div className="space-y-6">
+      <PageBannerEditor pageKey="galeria" label="Galeria" />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Galeria de Eventos</h1>

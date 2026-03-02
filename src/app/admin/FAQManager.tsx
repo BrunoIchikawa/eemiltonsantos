@@ -4,6 +4,7 @@ import { FAQItem } from '../../types';
 import { Plus, Edit2, Trash2, Save, X, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { useConfirm } from './components/ConfirmDialog';
+import { PageBannerEditor } from './components/PageBannerEditor';
 
 export function FAQManager() {
   const { data, updateFAQ } = useSiteData();
@@ -12,7 +13,7 @@ export function FAQManager() {
   const [editingItem, setEditingItem] = useState<FAQItem | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const handleEdit = (item: FAQItem) => {
+  const handleEdit = (item: FAQItem) => {d
     setEditingItem(item);
     setIsModalOpen(true);
   };
@@ -59,6 +60,7 @@ export function FAQManager() {
 
   return (
     <div className="space-y-6">
+      <PageBannerEditor pageKey="faq" label="FAQ" />
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Perguntas Frequentes (FAQ)</h1>

@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
 import { useConfirm } from './components/ConfirmDialog';
+import { PageBannerEditor } from './components/PageBannerEditor';
+import { OrganogramEditor } from './components/OrganogramEditor';
 
 // Inline helpers to avoid file issues if any
 const formatPhone = (value: string) => {
@@ -111,9 +113,11 @@ export function TeamManager() {
 
   return (
     <div className="space-y-6">
+      <PageBannerEditor pageKey="equipe" label="Equipe Gestora" />
+      <OrganogramEditor />
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Equipe Gestora</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Membros da Equipe</h1>
           <p className="text-gray-500">Gerencie os membros da direção e coordenação.</p>
         </div>
         <button
