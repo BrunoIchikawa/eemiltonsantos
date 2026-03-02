@@ -28,42 +28,102 @@ export function TeamPage() {
           </h2>
           <div className="max-w-full overflow-x-auto pb-8 mx-auto flex justify-center">
             {data.general.organogram && data.general.organogram.length > 0 ? (
-              <div className="min-w-fit">
-                {(() => {
-                  const renderTree = (parentId: string | null = null, level = 0) => {
-                    const nodes = data.general.organogram!.filter(b => (b.parentId || null) === parentId);
-                    if (nodes.length === 0) return null;
+              (() => {
+                type OrgNode = { id: string; role: string; name: string; parentId?: string | null };
+                const allNodes = data.general.organogram!;
+                
+                const NODE_W = 200;
+                const NODE_H = 72;
+                const GAP_X = 24;
+                const GAP_Y = 60;
 
-                    return (
-                      <div className={`flex flex-col items-center relative ${level > 0 ? 'mt-8' : ''}`}>
-                        {level > 0 && <div className="absolute -top-8 left-1/2 w-0.5 h-8 bg-primary/40 -translate-x-1/2 z-0"></div>}
-                        
-                        <div className="flex flex-row justify-center items-start gap-4 sm:gap-8 relative z-10">
-                          {nodes.length > 1 && level > 0 && (
-                            <div className="absolute -top-8 h-0.5 bg-primary/40 z-0" style={{ left: 'calc(50% / ' + nodes.length + ')', right: 'calc(50% / ' + nodes.length + ')' }}></div>
-                          )}
-                          {nodes.map((block, i) => (
-                            <div key={block.id} className="flex flex-col items-center relative">
-                              {nodes.length > 1 && level > 0 && (
-                                <div className="absolute -top-8 left-1/2 w-0.5 h-8 bg-primary/40 -translate-x-1/2 z-0"></div>
-                              )}
-                              
-                              <div className="bg-primary text-primary-foreground px-6 py-4 rounded-xl shadow-lg text-center w-[220px] border border-primary/20 hover:shadow-primary/30 hover:-translate-y-1 transition-all duration-300 relative z-20">
-                                <div className="font-bold text-lg leading-tight">{block.role}</div>
-                                <div className="text-sm opacity-90 mt-2 p-2 bg-black/10 rounded-lg font-medium shadow-inner">{block.name}</div>
-                              </div>
-                              
-                              {renderTree(block.id, level + 1)}
-                            </div>
-                          ))}
+                // Build tree structure
+                const getChildren = (parentId: string | null): OrgNode[] =>
+                  allNodes.filter(n => (n.parentId || null) === parentId);
+
+                // Calculate subtree width recursively
+                const getSubtreeWidth = (nodeId: string): number => {
+                  const children = getChildren(nodeId);
+                  if (children.length === 0) return NODE_W;
+                  const childrenWidth = children.reduce((sum, c) => sum + getSubtreeWidth(c.id), 0);
+                  return Math.max(NODE_W, childrenWidth + GAP_X * (children.length - 1));
+                };
+
+                // Collect positioned nodes and edges
+                const nodes: { x: number; y: number; node: OrgNode }[] = [];
+                const edges: { x1: number; y1: number; x2: number; y2: number }[] = [];
+
+                const layoutTree = (nodeId: string, x: number, y: number) => {
+                  const node = allNodes.find(n => n.id === nodeId);
+                  if (!node) return;
+                  nodes.push({ x, y, node });
+
+                  const children = getChildren(nodeId);
+                  if (children.length === 0) return;
+
+                  const totalChildWidth = children.reduce((sum, c) => sum + getSubtreeWidth(c.id), 0) + GAP_X * (children.length - 1);
+                  let childX = x + NODE_W / 2 - totalChildWidth / 2;
+
+                  children.forEach(child => {
+                    const childW = getSubtreeWidth(child.id);
+                    const childCenterX = childX + childW / 2 - NODE_W / 2;
+                    
+                    // Edge from parent bottom center to child top center
+                    edges.push({
+                      x1: x + NODE_W / 2,
+                      y1: y + NODE_H,
+                      x2: childCenterX + NODE_W / 2,
+                      y2: y + NODE_H + GAP_Y,
+                    });
+
+                    layoutTree(child.id, childCenterX, y + NODE_H + GAP_Y);
+                    childX += childW + GAP_X;
+                  });
+                };
+
+                // Layout all root nodes
+                const roots = getChildren(null);
+                const totalRootWidth = roots.reduce((sum, r) => sum + getSubtreeWidth(r.id), 0) + GAP_X * (roots.length - 1);
+                let rootX = 0;
+                roots.forEach(root => {
+                  const w = getSubtreeWidth(root.id);
+                  const cx = rootX + w / 2 - NODE_W / 2;
+                  layoutTree(root.id, cx, 0);
+                  rootX += w + GAP_X;
+                });
+
+                // Calculate SVG dimensions
+                const maxX = Math.max(...nodes.map(n => n.x + NODE_W), totalRootWidth);
+                const maxY = Math.max(...nodes.map(n => n.y + NODE_H)) + 20;
+
+                return (
+                  <svg width={maxX + 20} height={maxY} className="mx-auto">
+                    {/* Edges */}
+                    {edges.map((e, i) => {
+                      const midY = e.y1 + (e.y2 - e.y1) / 2;
+                      return (
+                        <path
+                          key={`edge-${i}`}
+                          d={`M ${e.x1} ${e.y1} L ${e.x1} ${midY} L ${e.x2} ${midY} L ${e.x2} ${e.y2}`}
+                          fill="none"
+                          stroke="hsl(var(--primary) / 0.4)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      );
+                    })}
+                    {/* Nodes */}
+                    {nodes.map(({ x, y, node: block }) => (
+                      <foreignObject key={block.id} x={x} y={y} width={NODE_W} height={NODE_H}>
+                        <div className="bg-primary text-primary-foreground px-4 py-3 rounded-xl shadow-lg text-center w-full h-full flex flex-col justify-center border border-primary/20 hover:shadow-primary/30 transition-shadow">
+                          <div className="font-bold text-sm leading-tight">{block.role}</div>
+                          <div className="text-xs opacity-85 mt-1 bg-black/10 rounded px-2 py-0.5 truncate">{block.name}</div>
                         </div>
-                      </div>
-                    );
-                  };
-
-                  return renderTree(null, 0);
-                })()}
-              </div>
+                      </foreignObject>
+                    ))}
+                  </svg>
+                );
+              })()
             ) : (
               <div className="text-center text-muted-foreground w-full py-8 bg-muted/30 rounded-lg">
                 Estrutura organizacional não cadastrada.
