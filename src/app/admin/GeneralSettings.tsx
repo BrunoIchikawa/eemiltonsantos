@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import { Save, Facebook, Instagram, Youtube, MapPin, Phone, Mail, Globe, Type, Users, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useConfirm } from './components/ConfirmDialog';
 
 // Inline helpers
 const formatPhone = (value: string) => {
@@ -89,14 +90,16 @@ export function GeneralSettings() {
     }));
   };
 
-  const removeOrganogramBlock = (index: number) => {
-    if (confirm('Deseja realmente remover este bloco? (Atencao: itens que dependem dele subirão para o topo da hierarquia)')) {
+  const showConfirm = useConfirm();
+
+  const removeOrganogramBlock = async (index: number) => {
+    const ok = await showConfirm({ message: 'Deseja realmente remover este bloco? Itens que dependem dele subirão para o topo da hierarquia.', variant: 'danger', confirmText: 'Remover' });
+    if (ok) {
       setFormData(prev => {
         const newOrg = [...(prev.organogram || [])];
         const removedId = newOrg[index].id;
         newOrg.splice(index, 1);
         
-        // Remove parent reference from children to avoid breaking the tree
         newOrg.forEach((item, i) => {
           if (item.parentId === removedId) {
             newOrg[i] = { ...item, parentId: null };

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
+import { useConfirm } from './components/ConfirmDialog';
 
 interface ContentManagerProps {
   section: 'projetos' | 'eventos' | 'premios';
@@ -137,15 +138,18 @@ export function ContentManager({ section }: ContentManagerProps) {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este item?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Tem certeza que deseja excluir este item?', variant: 'danger', confirmText: 'Excluir' });
+    if (ok) {
       const updated = config.items.filter((i: any) => String(i.id) !== String(id));
       config.updateFn(updated as any);
       toast.success('Item removido com sucesso!');
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingItem) return;
 
@@ -163,9 +167,8 @@ export function ContentManager({ section }: ContentManagerProps) {
       }
 
       if (isDatePast(editingItem.date)) {
-        if (!confirm('A data selecionada já passou. Deseja criar o evento mesmo assim?')) {
-          return;
-        }
+        const ok = await showConfirm({ message: 'A data selecionada já passou. Deseja criar o evento mesmo assim?', variant: 'warning', confirmText: 'Criar mesmo assim' });
+        if (!ok) return;
       }
     }
 

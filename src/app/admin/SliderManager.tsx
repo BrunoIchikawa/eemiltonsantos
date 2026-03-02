@@ -5,6 +5,7 @@ import { Plus, Edit2, Trash2, Save, X, Image as ImageIcon, Link as LinkIcon, Mov
 import { toast } from 'sonner';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
+import { useConfirm } from './components/ConfirmDialog';
 
 export function SliderManager() {
   const { data, updateSlides, uploadFile, deleteMedia } = useSiteData();
@@ -80,8 +81,11 @@ export function SliderManager() {
     toast.success('Slide salvo com sucesso!');
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este slide?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Tem certeza que deseja excluir este slide?', variant: 'danger', confirmText: 'Excluir' });
+    if (ok) {
       const newSlides = slides.filter((s: Slide) => String(s.id) !== String(id));
       updateSlides(newSlides);
       toast.success('Slide excluído com sucesso!');

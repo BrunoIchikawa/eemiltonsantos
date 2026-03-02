@@ -17,6 +17,7 @@ import { GalleryManager } from './GalleryManager';
 import { PopupManager } from './PopupManager';
 import { Toaster } from 'sonner';
 import { authService } from '../../services/authService';
+import { ConfirmProvider } from './components/ConfirmDialog';
 
 export function AdminPanel() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -54,15 +55,17 @@ export function AdminPanel() {
 
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <AdminLayout
-        currentPage={currentPage}
-        onNavigate={setCurrentPage}
-        onLogout={handleLogout}
-      >
-        {renderContent()}
-        <Toaster position="top-right" />
-      </AdminLayout>
-    </DndProvider>
+    <ConfirmProvider>
+      <DndProvider backend={HTML5Backend}>
+        <AdminLayout
+          currentPage={currentPage}
+          onNavigate={setCurrentPage}
+          onLogout={handleLogout}
+        >
+          {renderContent()}
+          <Toaster position="top-right" />
+        </AdminLayout>
+      </DndProvider>
+    </ConfirmProvider>
   );
 }

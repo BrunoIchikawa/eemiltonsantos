@@ -3,6 +3,7 @@ import { useSiteData } from '../context/SiteContext';
 import { Platform } from '../../types';
 import { Plus, Edit2, Trash2, Save, X, Link as LinkIcon, ExternalLink, Monitor } from 'lucide-react';
 import { toast } from 'sonner';
+import { useConfirm } from './components/ConfirmDialog';
 
 export function PlatformsManager() {
   const { data, updatePlatforms } = useSiteData();
@@ -27,8 +28,11 @@ export function PlatformsManager() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir esta plataforma?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Tem certeza que deseja excluir esta plataforma?', variant: 'danger', confirmText: 'Excluir' });
+    if (ok) {
       const updated = platforms.filter(p => String(p.id) !== String(id));
       setPlatforms(updated);
       updatePlatforms(updated);

@@ -6,6 +6,7 @@ import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { toast } from 'sonner';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
+import { useConfirm } from './components/ConfirmDialog';
 
 export function GalleryManager() {
   const { data, updateGallery, uploadFile, deleteMedia } = useSiteData();
@@ -68,8 +69,11 @@ export function GalleryManager() {
     setCurrentAlbum({});
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este álbum?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Tem certeza que deseja excluir este álbum?', variant: 'danger', confirmText: 'Excluir' });
+    if (ok) {
       updateGallery(data.gallery.filter(g => String(g.id) !== String(id)));
       toast.success('Álbum excluído.');
     }

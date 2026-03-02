@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
+import { useConfirm } from './components/ConfirmDialog';
 
 interface HomeManagerProps {
   onNavigate: (page: string) => void;
@@ -134,8 +135,11 @@ export function HomeManager({ onNavigate }: HomeManagerProps) {
     setWarnings(warnings.map(w => w.id === id ? { ...w, [field]: value } : w));
   };
 
-  const removeWarning = (id: string) => {
-    if (confirm('Remover este aviso?')) {
+  const showConfirm = useConfirm();
+
+  const removeWarning = async (id: string) => {
+    const ok = await showConfirm({ message: 'Remover este aviso?', variant: 'danger', confirmText: 'Remover' });
+    if (ok) {
       setWarnings(warnings.filter(w => w.id !== id));
     }
   };

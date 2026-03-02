@@ -3,6 +3,7 @@ import { useSiteData } from '../context/SiteContext';
 import { FAQItem } from '../../types';
 import { Plus, Edit2, Trash2, Save, X, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
+import { useConfirm } from './components/ConfirmDialog';
 
 export function FAQManager() {
   const { data, updateFAQ } = useSiteData();
@@ -27,8 +28,11 @@ export function FAQManager() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Excluir esta pergunta?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Excluir esta pergunta?', variant: 'danger', confirmText: 'Excluir' });
+    if (ok) {
       const updated = faqItems.filter(i => String(i.id) !== String(id));
       setFaqItems(updated);
       updateFAQ(updated);

@@ -6,6 +6,7 @@ import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { toast } from 'sonner';
 import { MediaPicker } from './components/MediaPicker';
 import { ImageCropperModal } from './components/ImageCropperModal';
+import { useConfirm } from './components/ConfirmDialog';
 
 // Inline helpers to avoid file issues if any
 const formatPhone = (value: string) => {
@@ -72,8 +73,11 @@ export function TeamManager() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja remover este membro da equipe?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Tem certeza que deseja remover este membro da equipe?', variant: 'danger', confirmText: 'Remover' });
+    if (ok) {
       const updated = members.filter(m => String(m.id) !== String(id));
       setMembers(updated);
       updateTeam(updated);

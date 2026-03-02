@@ -6,6 +6,7 @@ import { Plus, Edit, Trash2, X, AlertCircle, Check, Eye, EyeOff, Image as ImageI
 import { ImageWithFallback } from '../components/ui_elements/ImageWithFallback';
 import { ImageCropperModal } from './components/ImageCropperModal';
 import { toast } from 'sonner';
+import { useConfirm } from './components/ConfirmDialog';
 
 export function PopupManager() {
   const { data, updatePopups, uploadFile, deleteMedia } = useSiteData();
@@ -59,8 +60,11 @@ export function PopupManager() {
     setIsEditing(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este aviso?')) {
+  const showConfirm = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const ok = await showConfirm({ message: 'Tem certeza que deseja excluir este aviso?', variant: 'danger', confirmText: 'Excluir' });
+    if (ok) {
       const newPopups = data.popups.filter(p => String(p.id) !== String(id));
       updatePopups(newPopups);
     }
