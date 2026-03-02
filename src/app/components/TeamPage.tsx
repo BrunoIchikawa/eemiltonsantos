@@ -41,6 +41,28 @@ export function TeamPage() {
                 const getChildren = (parentId: string | null): OrgNode[] =>
                   allNodes.filter(n => (n.parentId || null) === parentId);
 
+                // --- MOBILE VIEW ---
+                const renderMobileTree = (parentId: string | null, level: number): React.ReactNode => {
+                  const nodes = getChildren(parentId);
+                  if (nodes.length === 0) return null;
+                  
+                  return (
+                    <div className={`flex flex-col gap-4 ${level > 0 ? 'ml-6 pl-4 border-l-2 border-primary/30 py-2' : ''}`}>
+                      {nodes.map(node => (
+                        <div key={node.id} className="relative">
+                          {level > 0 && <div className="absolute top-6 -left-4 w-4 h-[2px] bg-primary/30" />}
+                          <div className="bg-primary text-primary-foreground p-4 rounded-xl shadow-md border border-primary/20">
+                            <div className="font-bold text-base leading-tight">{node.role}</div>
+                            <div className="text-sm opacity-90 mt-1.5 inline-block bg-black/10 rounded px-2 py-0.5">{node.name}</div>
+                          </div>
+                          {renderMobileTree(node.id, level + 1)}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                };
+
+                // --- DESKTOP VIEW (SVG) ---
                 const subtreeWidthCache = new Map<string, number>();
                 const getSubtreeWidth = (nodeId: string): number => {
                   if (subtreeWidthCache.has(nodeId)) return subtreeWidthCache.get(nodeId)!;
@@ -114,39 +136,48 @@ export function TeamPage() {
                   : 200;
 
                 return (
-                  <svg
-                    viewBox={`0 0 ${svgW} ${svgH}`}
-                    preserveAspectRatio="xMidYMin meet"
-                    className="w-full h-auto block"
-                    style={{ maxHeight: '80vh' }}
-                  >
-                    {/* Connection lines */}
-                    {lines.map((l, i) => {
-                      const midY = l.y1 + (l.y2 - l.y1) / 2;
-                      return (
-                        <path
-                          key={`line-${i}`}
-                          d={`M${l.x1},${l.y1} V${midY} H${l.x2} V${l.y2}`}
-                          fill="none"
-                          stroke="#888"
-                          strokeWidth="2"
-                          strokeLinejoin="round"
-                        />
-                      );
-                    })}
-                    {/* Node boxes */}
-                    {positioned.map(({ x, y, node: b }) => (
-                      <foreignObject key={b.id} x={x} y={y} width={NODE_W} height={NODE_H}>
-                        <div
-                          className="bg-primary text-primary-foreground rounded-xl shadow-md text-center w-full h-full flex flex-col items-center justify-center px-3 py-2 border border-primary/20"
-                          style={{ width: NODE_W, height: NODE_H }}
+                  <>
+                    <div className="block lg:hidden w-full px-2">
+                      {renderMobileTree(null, 0)}
+                    </div>
+                    <div className="hidden lg:block w-full overflow-x-auto pb-6">
+                      <div className="flex justify-center min-w-max mx-auto px-4">
+                        <svg
+                          width={svgW}
+                          height={svgH}
+                          viewBox={`0 0 ${svgW} ${svgH}`}
+                          className="block"
                         >
-                          <div className="font-bold text-xs leading-tight" style={{ wordBreak: 'break-word' }}>{b.role}</div>
-                          <div className="text-[10px] opacity-80 mt-1 bg-black/10 rounded px-2 py-0.5 max-w-full truncate">{b.name}</div>
-                        </div>
-                      </foreignObject>
-                    ))}
-                  </svg>
+                          {/* Connection lines */}
+                          {lines.map((l, i) => {
+                            const midY = l.y1 + (l.y2 - l.y1) / 2;
+                            return (
+                              <path
+                                key={`line-${i}`}
+                                d={`M${l.x1},${l.y1} V${midY} H${l.x2} V${l.y2}`}
+                                fill="none"
+                                stroke="hsl(var(--primary) / 0.4)"
+                                strokeWidth="2.5"
+                                strokeLinejoin="round"
+                              />
+                            );
+                          })}
+                          {/* Node boxes */}
+                          {positioned.map(({ x, y, node: b }) => (
+                            <foreignObject key={b.id} x={x} y={y} width={NODE_W} height={NODE_H}>
+                              <div
+                                className="bg-primary text-primary-foreground rounded-xl shadow-md text-center w-full h-full flex flex-col items-center justify-center px-4 py-2 border border-primary/20"
+                                style={{ width: NODE_W, height: NODE_H }}
+                              >
+                                <div className="font-bold text-sm leading-tight" style={{ wordBreak: 'break-word' }}>{b.role}</div>
+                                <div className="text-xs opacity-90 mt-1.5 bg-black/10 rounded px-2 py-0.5 max-w-full truncate">{b.name}</div>
+                              </div>
+                            </foreignObject>
+                          ))}
+                        </svg>
+                      </div>
+                    </div>
+                  </>
                 );
               })()
             ) : (
