@@ -295,7 +295,13 @@ export function HomePage() {
               <p className="text-sm sm:text-base text-gray-500 leading-relaxed">Fique por dentro das datas de provas, reuniões e eventos.</p>
             </div>
             <div
-              onClick={() => onNavigate('sobre')}
+              onClick={() => {
+                if (data?.general?.mapUrl) {
+                  window.open(data.general.mapUrl, '_blank');
+                } else {
+                  document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="p-8 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
             >
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-500">

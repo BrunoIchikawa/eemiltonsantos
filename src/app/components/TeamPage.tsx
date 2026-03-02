@@ -26,7 +26,7 @@ export function TeamPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8 text-center">
             Estrutura Organizacional
           </h2>
-          <div className="w-full pb-8">
+          <div className="w-full pb-8 bg-slate-50 border border-slate-200/60 rounded-3xl p-4 sm:p-8 shadow-inner">
             {data.general.organogram && data.general.organogram.length > 0 ? (
               (() => {
                 type OrgNode = { id: string; role: string; name: string; parentId?: string | null };

@@ -173,23 +173,23 @@ export function GeneralSettings() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp 1</label>
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => handleChange('phone', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
-                placeholder="(11) 3222-1234"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Principal</label>
               <input
                 type="tel"
                 value={formData.whatsapp}
                 onChange={(e) => handleChange('whatsapp', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
                 placeholder="(11) 99999-9999"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Telefone Fixo / Ligação</label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="(11) 3222-1234"
               />
             </div>
             <div>
