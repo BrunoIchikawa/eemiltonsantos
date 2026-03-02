@@ -89,6 +89,36 @@ export function PlatformsPage() {
           )}
         </div>
 
+        {/* Guia de Acesso: SED e Sala do Futuro */}
+        <div className="bg-primary/5 rounded-2xl p-8 shadow-sm border border-primary/20">
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            <div className="bg-primary text-primary-foreground p-4 rounded-xl shrink-0">
+              <Info className="w-8 h-8" />
+            </div>
+            
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-foreground mb-4">Acesso às Plataformas da SED</h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  As plataformas digitais disponibilizadas pela Secretaria da Educação (SED) agora estão integradas ao portal da <strong>Sala do Futuro</strong>. 
+                </p>
+                <div className="bg-white p-4 sm:p-6 rounded-xl border border-border shadow-sm">
+                  <h3 className="font-bold text-foreground mb-3 flex items-center gap-2 text-lg">
+                    <Monitor className="w-5 h-5 text-primary" />
+                    Como acessar a Sala do Futuro?
+                  </h3>
+                  <ol className="list-decimal pl-5 space-y-3 marker:text-primary marker:font-bold">
+                    <li>Acesse o <strong>portal SED (Secretaria Escolar Digital)</strong> usando seu RA (Registro do Aluno) para alunos ou RG para responsáveis, e sua senha.</li>
+                    <li>No menu ou tela inicial, localize a aba ou botão indicando <strong>Sala do Futuro</strong>.</li>
+                    <li>Siga as instruções na tela para autenticar seu acesso.</li>
+                    <li>Pronto! Todas as suas tarefas, repositórios de material didático e canais de aprendizado estarão centralizados na Plataforma CMSP (Centro de Mídias) e Sala do Futuro.</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
       </div>
     </div>

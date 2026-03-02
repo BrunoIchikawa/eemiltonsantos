@@ -16,7 +16,7 @@ export interface GeneralSettings {
   footerText: string;
   businessHours?: string;
   pageBanners?: Record<string, { title: string; subtitle: string }>;
-  organogram?: { id: string; role: string; name: string }[];
+  organogram?: { id: string; role: string; name: string; parentId?: string | null }[];
 }
 
 export interface TeamMember {

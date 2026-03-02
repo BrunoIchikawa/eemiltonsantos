@@ -74,7 +74,7 @@ export function GeneralSettings() {
     }));
   };
 
-  const handleOrganogramChange = (index: number, field: 'role' | 'name', value: string) => {
+  const handleOrganogramChange = (index: number, field: 'role' | 'name' | 'parentId', value: string | null) => {
     setFormData(prev => {
       const newOrg = [...(prev.organogram || [])];
       newOrg[index] = { ...newOrg[index], [field]: value };
@@ -85,15 +85,24 @@ export function GeneralSettings() {
   const addOrganogramBlock = () => {
     setFormData(prev => ({
       ...prev,
-      organogram: [...(prev.organogram || []), { id: Date.now().toString(), role: '', name: '' }]
+      organogram: [...(prev.organogram || []), { id: Date.now().toString(), role: '', name: '', parentId: null }]
     }));
   };
 
   const removeOrganogramBlock = (index: number) => {
-    if (confirm('Deseja realmente remover este bloco?')) {
+    if (confirm('Deseja realmente remover este bloco? (Atencao: itens que dependem dele subirão para o topo da hierarquia)')) {
       setFormData(prev => {
         const newOrg = [...(prev.organogram || [])];
+        const removedId = newOrg[index].id;
         newOrg.splice(index, 1);
+        
+        // Remove parent reference from children to avoid breaking the tree
+        newOrg.forEach((item, i) => {
+          if (item.parentId === removedId) {
+            newOrg[i] = { ...item, parentId: null };
+          }
+        });
+        
         return { ...prev, organogram: newOrg };
       });
     }
@@ -368,7 +377,7 @@ export function GeneralSettings() {
                   <div className="w-8 h-8 bg-white border border-gray-300 rounded-full flex items-center justify-center font-bold text-gray-400 text-xs shrink-0">
                     {index + 1}
                   </div>
-                  <div className="grid grid-cols-2 gap-4 flex-1">
+                  <div className="grid grid-cols-3 gap-4 flex-1">
                     <div>
                       <input
                         type="text"
@@ -386,6 +395,20 @@ export function GeneralSettings() {
                         placeholder="Nome (ex: João Silva)"
                         className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E7BA6] bg-white"
                       />
+                    </div>
+                    <div>
+                      <select
+                        value={block.parentId || ''}
+                        onChange={(e) => handleOrganogramChange(index, 'parentId', e.target.value || null)}
+                        className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2E7BA6] bg-white"
+                      >
+                        <option value="">Abaixo de (Nenhum / Topo)</option>
+                        {formData.organogram?.filter(b => b.id !== block.id).map(possibleParent => (
+                          <option key={'parent-'+possibleParent.id} value={possibleParent.id}>
+                            {possibleParent.role} ({possibleParent.name})
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   <button

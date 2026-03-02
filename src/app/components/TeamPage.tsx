@@ -26,18 +26,46 @@ export function TeamPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8 text-center">
             Estrutura Organizacional
           </h2>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-full overflow-x-auto pb-8 mx-auto flex justify-center">
             {data.general.organogram && data.general.organogram.length > 0 ? (
-              <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-                {data.general.organogram.map((block) => (
-                  <div key={block.id} className="bg-primary text-primary-foreground px-6 py-4 rounded-lg shadow-lg text-center flex-1 min-w-[200px] max-w-[300px] border border-primary/20 hover:scale-105 transition-transform duration-200">
-                    <div className="font-bold text-lg">{block.role}</div>
-                    <div className="text-sm opacity-90 mt-2 p-2 bg-black/10 rounded-md">{block.name}</div>
-                  </div>
-                ))}
+              <div className="min-w-fit">
+                {(() => {
+                  const renderTree = (parentId: string | null = null, level = 0) => {
+                    const nodes = data.general.organogram!.filter(b => (b.parentId || null) === parentId);
+                    if (nodes.length === 0) return null;
+
+                    return (
+                      <div className={`flex flex-col items-center relative ${level > 0 ? 'mt-8' : ''}`}>
+                        {level > 0 && <div className="absolute -top-8 left-1/2 w-0.5 h-8 bg-primary/40 -translate-x-1/2 z-0"></div>}
+                        
+                        <div className="flex flex-row justify-center items-start gap-4 sm:gap-8 relative z-10">
+                          {nodes.length > 1 && level > 0 && (
+                            <div className="absolute -top-8 h-0.5 bg-primary/40 z-0" style={{ left: 'calc(50% / ' + nodes.length + ')', right: 'calc(50% / ' + nodes.length + ')' }}></div>
+                          )}
+                          {nodes.map((block, i) => (
+                            <div key={block.id} className="flex flex-col items-center relative">
+                              {nodes.length > 1 && level > 0 && (
+                                <div className="absolute -top-8 left-1/2 w-0.5 h-8 bg-primary/40 -translate-x-1/2 z-0"></div>
+                              )}
+                              
+                              <div className="bg-primary text-primary-foreground px-6 py-4 rounded-xl shadow-lg text-center w-[220px] border border-primary/20 hover:shadow-primary/30 hover:-translate-y-1 transition-all duration-300 relative z-20">
+                                <div className="font-bold text-lg leading-tight">{block.role}</div>
+                                <div className="text-sm opacity-90 mt-2 p-2 bg-black/10 rounded-lg font-medium shadow-inner">{block.name}</div>
+                              </div>
+                              
+                              {renderTree(block.id, level + 1)}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  };
+
+                  return renderTree(null, 0);
+                })()}
               </div>
             ) : (
-              <div className="text-center text-muted-foreground py-8 bg-muted/30 rounded-lg">
+              <div className="text-center text-muted-foreground w-full py-8 bg-muted/30 rounded-lg">
                 Estrutura organizacional não cadastrada.
               </div>
             )}
