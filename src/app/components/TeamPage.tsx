@@ -26,98 +26,130 @@ export function TeamPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-6 sm:mb-8 text-center">
             Estrutura Organizacional
           </h2>
-          <div className="max-w-full overflow-x-auto pb-8 mx-auto flex justify-center">
+          <div className="w-full overflow-x-auto pb-8">
             {data.general.organogram && data.general.organogram.length > 0 ? (
               (() => {
                 type OrgNode = { id: string; role: string; name: string; parentId?: string | null };
                 const allNodes = data.general.organogram!;
-                
-                const NODE_W = 200;
-                const NODE_H = 72;
-                const GAP_X = 24;
-                const GAP_Y = 60;
 
-                // Build tree structure
+                const NODE_W = 170;
+                const NODE_H = 80;
+                const GAP_X = 16;
+                const GAP_Y = 50;
+                const PAD = 20;
+
                 const getChildren = (parentId: string | null): OrgNode[] =>
                   allNodes.filter(n => (n.parentId || null) === parentId);
 
-                // Calculate subtree width recursively
+                // Pass 1: calculate subtree widths bottom-up
+                const subtreeWidthCache = new Map<string, number>();
                 const getSubtreeWidth = (nodeId: string): number => {
+                  if (subtreeWidthCache.has(nodeId)) return subtreeWidthCache.get(nodeId)!;
                   const children = getChildren(nodeId);
-                  if (children.length === 0) return NODE_W;
-                  const childrenWidth = children.reduce((sum, c) => sum + getSubtreeWidth(c.id), 0);
-                  return Math.max(NODE_W, childrenWidth + GAP_X * (children.length - 1));
+                  let w: number;
+                  if (children.length === 0) {
+                    w = NODE_W;
+                  } else {
+                    w = children.reduce((sum, c) => sum + getSubtreeWidth(c.id), 0)
+                      + GAP_X * (children.length - 1);
+                    w = Math.max(NODE_W, w);
+                  }
+                  subtreeWidthCache.set(nodeId, w);
+                  return w;
                 };
 
-                // Collect positioned nodes and edges
-                const nodes: { x: number; y: number; node: OrgNode }[] = [];
-                const edges: { x1: number; y1: number; x2: number; y2: number }[] = [];
+                // Pass 2: position each node. x = left edge of subtree region
+                const positioned: { x: number; y: number; node: OrgNode }[] = [];
+                const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
 
-                const layoutTree = (nodeId: string, x: number, y: number) => {
+                const layout = (nodeId: string, regionLeft: number, y: number) => {
                   const node = allNodes.find(n => n.id === nodeId);
                   if (!node) return;
-                  nodes.push({ x, y, node });
+                  const regionW = getSubtreeWidth(nodeId);
+                  // Center the node box within its region
+                  const nodeX = regionLeft + (regionW - NODE_W) / 2;
+                  positioned.push({ x: nodeX, y, node });
 
                   const children = getChildren(nodeId);
                   if (children.length === 0) return;
 
-                  const totalChildWidth = children.reduce((sum, c) => sum + getSubtreeWidth(c.id), 0) + GAP_X * (children.length - 1);
-                  let childX = x + NODE_W / 2 - totalChildWidth / 2;
+                  const childY = y + NODE_H + GAP_Y;
+                  let childLeft = regionLeft;
+                  // If children total width < regionW, center them
+                  const childrenTotalW = children.reduce((s, c) => s + getSubtreeWidth(c.id), 0)
+                    + GAP_X * (children.length - 1);
+                  if (childrenTotalW < regionW) {
+                    childLeft = regionLeft + (regionW - childrenTotalW) / 2;
+                  }
+
+                  const parentCenterX = nodeX + NODE_W / 2;
+                  const parentBottomY = y + NODE_H;
 
                   children.forEach(child => {
-                    const childW = getSubtreeWidth(child.id);
-                    const childCenterX = childX + childW / 2 - NODE_W / 2;
-                    
-                    // Edge from parent bottom center to child top center
-                    edges.push({
-                      x1: x + NODE_W / 2,
-                      y1: y + NODE_H,
-                      x2: childCenterX + NODE_W / 2,
-                      y2: y + NODE_H + GAP_Y,
+                    const childRegionW = getSubtreeWidth(child.id);
+                    const childNodeX = childLeft + (childRegionW - NODE_W) / 2;
+                    const childCenterX = childNodeX + NODE_W / 2;
+
+                    lines.push({
+                      x1: parentCenterX,
+                      y1: parentBottomY,
+                      x2: childCenterX,
+                      y2: childY,
                     });
 
-                    layoutTree(child.id, childCenterX, y + NODE_H + GAP_Y);
-                    childX += childW + GAP_X;
+                    layout(child.id, childLeft, childY);
+                    childLeft += childRegionW + GAP_X;
                   });
                 };
 
-                // Layout all root nodes
+                // Layout roots side by side
                 const roots = getChildren(null);
-                const totalRootWidth = roots.reduce((sum, r) => sum + getSubtreeWidth(r.id), 0) + GAP_X * (roots.length - 1);
-                let rootX = 0;
+                let currentLeft = PAD;
                 roots.forEach(root => {
-                  const w = getSubtreeWidth(root.id);
-                  const cx = rootX + w / 2 - NODE_W / 2;
-                  layoutTree(root.id, cx, 0);
-                  rootX += w + GAP_X;
+                  getSubtreeWidth(root.id); // ensure cache
+                  layout(root.id, currentLeft, PAD);
+                  currentLeft += getSubtreeWidth(root.id) + GAP_X;
                 });
 
-                // Calculate SVG dimensions
-                const maxX = Math.max(...nodes.map(n => n.x + NODE_W), totalRootWidth);
-                const maxY = Math.max(...nodes.map(n => n.y + NODE_H)) + 20;
+                // Calculate SVG size from actual positions
+                const svgW = positioned.length > 0
+                  ? Math.max(...positioned.map(n => n.x + NODE_W)) + PAD
+                  : 400;
+                const svgH = positioned.length > 0
+                  ? Math.max(...positioned.map(n => n.y + NODE_H)) + PAD
+                  : 200;
 
                 return (
-                  <svg width={maxX + 20} height={maxY} className="mx-auto">
-                    {/* Edges */}
-                    {edges.map((e, i) => {
-                      const midY = e.y1 + (e.y2 - e.y1) / 2;
+                  <svg
+                    width={svgW}
+                    height={svgH}
+                    viewBox={`0 0 ${svgW} ${svgH}`}
+                    className="mx-auto block"
+                    style={{ minWidth: svgW }}
+                  >
+                    {/* Connection lines */}
+                    {lines.map((l, i) => {
+                      const midY = l.y1 + (l.y2 - l.y1) / 2;
                       return (
                         <path
-                          key={`edge-${i}`}
-                          d={`M ${e.x1} ${e.y1} L ${e.x1} ${midY} L ${e.x2} ${midY} L ${e.x2} ${e.y2}`}
+                          key={`line-${i}`}
+                          d={`M${l.x1},${l.y1} V${midY} H${l.x2} V${l.y2}`}
                           fill="none"
-                          stroke="hsl(var(--primary) / 0.4)"
+                          stroke="#888"
                           strokeWidth="2"
-                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                       );
                     })}
-                    {/* Nodes */}
-                    {nodes.map(({ x, y, node: block }) => (
-                      <foreignObject key={block.id} x={x} y={y} width={NODE_W} height={NODE_H}>
-                        <div className="bg-primary text-primary-foreground px-4 py-3 rounded-xl shadow-lg text-center w-full h-full flex flex-col justify-center border border-primary/20 hover:shadow-primary/30 transition-shadow">
-                          <div className="font-bold text-sm leading-tight">{block.role}</div>
-                          <div className="text-xs opacity-85 mt-1 bg-black/10 rounded px-2 py-0.5 truncate">{block.name}</div>
+                    {/* Node boxes */}
+                    {positioned.map(({ x, y, node: b }) => (
+                      <foreignObject key={b.id} x={x} y={y} width={NODE_W} height={NODE_H}>
+                        <div
+                          className="bg-primary text-primary-foreground rounded-xl shadow-md text-center w-full h-full flex flex-col items-center justify-center px-3 py-2 border border-primary/20"
+                          style={{ width: NODE_W, height: NODE_H }}
+                        >
+                          <div className="font-bold text-xs leading-tight" style={{ wordBreak: 'break-word' }}>{b.role}</div>
+                          <div className="text-[10px] opacity-80 mt-1 bg-black/10 rounded px-2 py-0.5 max-w-full truncate">{b.name}</div>
                         </div>
                       </foreignObject>
                     ))}
