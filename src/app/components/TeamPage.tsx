@@ -32,14 +32,29 @@ export function TeamPage() {
                 type OrgNode = { id: string; role: string; name: string; parentId?: string | null };
                 const allNodes = data.general.organogram!;
 
-                const NODE_W = 170;
-                const NODE_H = 80;
-                const GAP_X = 20;
-                const GAP_Y = 50;
+                const NODE_W = 240;
+                const NODE_H = 100;
+                const GAP_X = 24;
+                const GAP_Y = 54;
                 const PAD = 30;
 
                 const getChildren = (parentId: string | null): OrgNode[] =>
                   allNodes.filter(n => (n.parentId || null) === parentId);
+
+                const OrgNodeCard = ({ block }: { block: OrgNode }) => (
+                  <div className="bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] border border-slate-200/60 w-full h-full flex flex-col items-center justify-center p-3 relative overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.12)] hover:-translate-y-0.5">
+                    <div className="absolute top-0 left-0 w-full h-1.5 bg-primary"></div>
+                    <div 
+                      className="font-bold text-[15px] sm:text-base text-slate-800 text-center leading-tight mb-1.5 w-full px-1"
+                      style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                    >
+                      {block.role}
+                    </div>
+                    <div className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-full truncate max-w-full">
+                      {block.name}
+                    </div>
+                  </div>
+                );
 
                 // --- MOBILE VIEW ---
                 const renderMobileTree = (parentId: string | null, level: number): React.ReactNode => {
@@ -47,13 +62,12 @@ export function TeamPage() {
                   if (nodes.length === 0) return null;
                   
                   return (
-                    <div className={`flex flex-col gap-4 ${level > 0 ? 'ml-6 pl-4 border-l-2 border-primary/30 py-2' : ''}`}>
+                    <div className={`flex flex-col gap-5 ${level > 0 ? 'ml-6 pl-4 border-l-2 border-slate-200 py-2' : ''}`}>
                       {nodes.map(node => (
-                        <div key={node.id} className="relative">
-                          {level > 0 && <div className="absolute top-6 -left-4 w-4 h-[2px] bg-primary/30" />}
-                          <div className="bg-primary text-primary-foreground p-4 rounded-xl shadow-md border border-primary/20">
-                            <div className="font-bold text-base leading-tight">{node.role}</div>
-                            <div className="text-sm opacity-90 mt-1.5 inline-block bg-black/10 rounded px-2 py-0.5">{node.name}</div>
+                        <div key={node.id} className="relative w-full max-w-sm">
+                          {level > 0 && <div className="absolute top-8 -left-4 w-4 h-[2px] bg-slate-200" />}
+                          <div className="h-[100px]">
+                            <OrgNodeCard block={node} />
                           </div>
                           {renderMobileTree(node.id, level + 1)}
                         </div>
@@ -146,7 +160,8 @@ export function TeamPage() {
                           width={svgW}
                           height={svgH}
                           viewBox={`0 0 ${svgW} ${svgH}`}
-                          className="block"
+                          className="block mx-auto"
+                          style={{ maxWidth: `${svgW}px`, width: '100%', maxHeight: '75vh' }}
                         >
                           {/* Connection lines */}
                           {lines.map((l, i) => {
@@ -156,7 +171,7 @@ export function TeamPage() {
                                 key={`line-${i}`}
                                 d={`M${l.x1},${l.y1} V${midY} H${l.x2} V${l.y2}`}
                                 fill="none"
-                                stroke="hsl(var(--primary) / 0.4)"
+                                stroke="#cbd5e1"
                                 strokeWidth="2.5"
                                 strokeLinejoin="round"
                               />
@@ -165,13 +180,7 @@ export function TeamPage() {
                           {/* Node boxes */}
                           {positioned.map(({ x, y, node: b }) => (
                             <foreignObject key={b.id} x={x} y={y} width={NODE_W} height={NODE_H}>
-                              <div
-                                className="bg-primary text-primary-foreground rounded-xl shadow-md text-center w-full h-full flex flex-col items-center justify-center px-4 py-2 border border-primary/20"
-                                style={{ width: NODE_W, height: NODE_H }}
-                              >
-                                <div className="font-bold text-sm leading-tight" style={{ wordBreak: 'break-word' }}>{b.role}</div>
-                                <div className="text-xs opacity-90 mt-1.5 bg-black/10 rounded px-2 py-0.5 max-w-full truncate">{b.name}</div>
-                              </div>
+                              <OrgNodeCard block={b} />
                             </foreignObject>
                           ))}
                         </svg>
