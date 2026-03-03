@@ -1,4 +1,4 @@
-# 🏫 E.E. Prof. Milton Santos — Site Institucional
+# E.E. Prof. Milton Santos — Site Institucional
 
 Site institucional completo da **Escola Estadual Professor Milton Santos**, desenvolvido com React (Vite) no frontend e PHP + MySQL no backend, com painel administrativo integrado.
 
@@ -6,7 +6,7 @@ Site institucional completo da **Escola Estadual Professor Milton Santos**, dese
 
 ---
 
-## 📸 Visão Geral
+## Visão Geral
 
 O sistema é dividido em duas camadas:
 
@@ -15,7 +15,7 @@ O sistema é dividido em duas camadas:
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Camada     | Tecnologia                                                             |
 | ---------- | ---------------------------------------------------------------------- |
@@ -31,7 +31,7 @@ O sistema é dividido em duas camadas:
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 eemiltonsantos/
@@ -59,9 +59,9 @@ eemiltonsantos/
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 🌐 Site Público
+### Site Público
 - **Página Inicial** com slider de imagens, avisos da escola e cardápio semanal
 - **Sobre a Escola** com história, valores, infraestrutura, galeria de fotos e estatísticas
 - **Projetos** com listagem, filtros e modal de detalhes
@@ -74,7 +74,7 @@ eemiltonsantos/
 - **Pop-ups** configuráveis de avisos e comunicados
 - **Footer** com informações de contato, redes sociais e mapa
 
-### 🔐 Painel Administrativo
+### Painel Administrativo
 - **Autenticação** por senha com hash bcrypt (login seguro via sessão PHP)
 - **Gerenciador de Mídia** — Upload, visualização, exclusão e rastreamento de uso de imagens
 - **Deleção em Cascata** — Ao excluir uma mídia, todas as referências no site são limpas automaticamente
@@ -92,14 +92,14 @@ eemiltonsantos/
   - Galeria
   - Pop-ups
 
-### 💾 Persistência de Dados
+### Persistência de Dados
 - **Tabela JSON centralizada** (`site_data`) — Cada seção do site é armazenada como JSON no MySQL
 - **Endpoints genéricos** (`get_data.php` / `update_data.php`) — Leitura e escrita de qualquer seção
 - **Fallback inteligente** — Se o banco estiver vazio, dados default são exibidos até o admin salvar
 
 ---
 
-## 🚀 Como Rodar Localmente
+## Como Rodar Localmente
 
 ### Pré-requisitos
 - Node.js 18+
@@ -132,7 +132,7 @@ export const API_URL = 'http://localhost/eemiltonsantos/backend';
 
 ---
 
-## 🔧 Deploy (Hostinger)
+## Deploy (Hostinger)
 
 1. Rodar `npm run build` para gerar a pasta `dist/`
 2. Subir o conteúdo de `dist/` para `public_html/` na Hostinger
@@ -143,7 +143,7 @@ export const API_URL = 'http://localhost/eemiltonsantos/backend';
 
 ---
 
-## 🔒 Segurança
+## Segurança
 
 - Senhas armazenadas com **bcrypt** (`password_hash` / `password_verify`)
 - Sessões PHP com regeneração de ID após login
@@ -154,12 +154,12 @@ export const API_URL = 'http://localhost/eemiltonsantos/backend';
 
 ---
 
-## 📄 Licença
+## Licença
 
 Projeto privado desenvolvido para a E.E. Prof. Milton Santos.
 
 ---
 
-## 👥 Autores
+## Autores
 
 - **Bruno** — Desenvolvimento Full-Stack
