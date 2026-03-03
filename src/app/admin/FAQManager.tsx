@@ -13,7 +13,7 @@ export function FAQManager() {
   const [editingItem, setEditingItem] = useState<FAQItem | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const handleEdit = (item: FAQItem) => {d
+  const handleEdit = (item: FAQItem) => {
     setEditingItem(item);
     setIsModalOpen(true);
   };
