@@ -181,11 +181,18 @@ export function CalendarPage() {
                 return (
                   <div key={event.id} className="bg-white rounded-xl border border-border p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row gap-5 hover:shadow-md transition-shadow">
                     {/* Date Box */}
-                    <div className={`${getEventColor(event.audience)} w-full sm:w-24 rounded-lg flex flex-col items-center justify-center text-white py-3 shrink-0`}>
-                      <span className="text-xs font-medium uppercase opacity-90">
-                        {daysLeft === 0 ? 'Hoje' : daysLeft === 1 ? 'Amanhã' : `Em ${daysLeft} dias`}
+                    <div className={`${getEventColor(event.audience)} w-full sm:w-28 rounded-lg flex flex-col items-center justify-center text-white py-3 px-2 shrink-0`}>
+                      <span className="text-[10px] font-medium uppercase opacity-90 text-center leading-tight">
+                        {daysLeft === 0 ? 'Hoje' : daysLeft === 1 ? 'Amanhã' : `Começa em ${daysLeft} dias`}
                       </span>
-                      <span className="text-xl font-bold">{d} de {monthName}</span>
+                      <span className="text-xl font-bold mt-1 text-center leading-none">
+                        {d} <span className="text-sm font-normal">de</span> {monthName}
+                      </span>
+                      {event.endDate && event.endDate !== event.date && (
+                        <div className="text-[10px] mt-2 opacity-90 text-center font-semibold border-t border-white/20 pt-1 w-full truncate">
+                          Até {event.endDate.split('/')[0]}/{event.endDate.split('/')[1]}
+                        </div>
+                      )}
                     </div>
 
                     {/* Info */}
@@ -321,9 +328,28 @@ export function CalendarPage() {
                       </span>
                       <h4 className="font-bold text-gray-900">{event.title}</h4>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{event.description}</p>
-                    <div className="text-xs text-gray-400 bg-gray-50 p-2 rounded">
-                      <strong>Categoria:</strong> {event.category}
+                    <p className="text-sm text-gray-600 mb-3">{event.description}</p>
+                    <div className="flex flex-col gap-1.5 text-xs text-gray-600 bg-gray-50/80 p-3 rounded-lg border border-gray-100">
+                      <div className="flex items-start gap-2">
+                        <CalendarIcon className="w-4 h-4 text-gray-400 shrink-0" />
+                        <span>
+                          <strong>Período:</strong> {event.date}
+                          {event.endDate && event.endDate !== event.date ? ` até ${event.endDate}` : ''}
+                        </span>
+                      </div>
+                      {(event.startTime || event.endTime) && (
+                        <div className="flex items-start gap-2">
+                          <Clock className="w-4 h-4 text-gray-400 shrink-0" />
+                          <span>
+                            <strong>Horário:</strong> {event.startTime || ''}
+                            {event.endTime ? ` às ${event.endTime}` : ''}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-2">
+                        <Info className="w-4 h-4 text-gray-400 shrink-0" />
+                        <span><strong>Categoria:</strong> {event.category}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
