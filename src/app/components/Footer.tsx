@@ -77,9 +77,9 @@ export function Footer() {
     <>
       <footer className={`${footerBgColor} text-gray-100 mt-auto border-t-4 border-[#0099DD]`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
             {/* Coluna 1: Identidade e Horários */}
-            <div className="space-y-6">
+            <div className="lg:col-span-3 space-y-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">{general.schoolName}</h2>
                 <p className="text-sm text-blue-100 leading-relaxed">
@@ -117,7 +117,7 @@ export function Footer() {
             </div>
 
             {/* Coluna 2: Links Rápidos */}
-            <div>
+            <div className="lg:col-span-2">
               <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <span className="w-1 h-6 bg-[#009B3A] rounded-full"></span>
                 Acesso Rápido
@@ -138,7 +138,7 @@ export function Footer() {
             </div>
 
             {/* Coluna 3: Contato */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-4">
               <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <span className="w-1 h-6 bg-[#705741] rounded-full"></span>
                 Fale Conosco
@@ -193,7 +193,7 @@ export function Footer() {
             </div>
 
             {/* Coluna 4: Mapa */}
-            <div className="flex flex-col h-full">
+            <div className="lg:col-span-3 flex flex-col h-full">
               <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <span className="w-1 h-6 bg-[#0099DD] rounded-full"></span>
                 Localização
