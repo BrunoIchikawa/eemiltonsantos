@@ -135,9 +135,11 @@ export function GalleryManager() {
                 onChange={e => setCurrentAlbum(prev => ({ ...prev, category: e.target.value }))}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7BA6] focus:border-transparent outline-none bg-white"
               >
-                <option value="Eventos">Eventos</option>
-                <option value="Passeios Pedagógicos">Passeios Pedagógicos</option>
-                <option value="Projetos Escolares">Projetos Escolares</option>
+                {(() => {
+                  const options = data.general.dropdownOptions?.galleryCategories;
+                  const safeOptions = options && options.length > 0 ? options : ['Eventos', 'Geral'];
+                  return safeOptions.map(cat => <option key={cat} value={cat}>{cat}</option>);
+                })()}
               </select>
             </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSiteData } from '../context/SiteContext';
-import { Save, Facebook, Instagram, Youtube, MapPin, Phone, Mail, Globe } from 'lucide-react';
+import { Save, Facebook, Instagram, Youtube, MapPin, Phone, Mail, Globe, List } from 'lucide-react';
 import { toast } from 'sonner';
 import { useConfirm } from './components/ConfirmDialog';
 
@@ -60,6 +60,18 @@ export function GeneralSettings() {
     const newSocials = [...formData.socials];
     newSocials[index] = { ...newSocials[index], [field]: value };
     setFormData(prev => ({ ...prev, socials: newSocials }));
+  };
+
+  const handleDropdownsChange = (categoryType: 'projectCategories' | 'galleryCategories' | 'eventCategories' | 'awardCategories', value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      dropdownOptions: {
+        ...(prev.dropdownOptions || {
+          projectCategories: [], galleryCategories: [], eventCategories: [], awardCategories: []
+        }),
+        [categoryType]: value.split('\n').filter(v => v.trim() !== '')
+      }
+    }));
   };
 
   const showConfirm = useConfirm();
@@ -255,7 +267,58 @@ export function GeneralSettings() {
           </div>
         </div>
 
-
+        {/* Gerenciador de Categorias (Dropdowns) */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <List className="w-5 h-5 text-[#2E7BA6]" />
+            Gerenciador de Categorias (Menus Dropdown)
+          </h2>
+          <p className="text-sm text-gray-500 mb-6">
+            Configure as opções disponíveis nos menus do painel. Adicione uma categoria por linha.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorias de Projetos</label>
+              <textarea
+                value={formData.dropdownOptions?.projectCategories?.join('\n') || ''}
+                onChange={(e) => handleDropdownsChange('projectCategories', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Exemplo:&#10;Sustentabilidade&#10;Tecnologia"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorias de Eventos</label>
+              <textarea
+                value={formData.dropdownOptions?.eventCategories?.join('\n') || ''}
+                onChange={(e) => handleDropdownsChange('eventCategories', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Exemplo:&#10;Seminário&#10;Feira"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorias da Galeria</label>
+              <textarea
+                value={formData.dropdownOptions?.galleryCategories?.join('\n') || ''}
+                onChange={(e) => handleDropdownsChange('galleryCategories', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Exemplo:&#10;Passeios&#10;Trabalhos de Alunos"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorias de Prêmios</label>
+              <textarea
+                value={formData.dropdownOptions?.awardCategories?.join('\n') || ''}
+                onChange={(e) => handleDropdownsChange('awardCategories', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Exemplo:&#10;Acadêmico&#10;Esportivo"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Botão Salvar Fixo */}
         <div className="sticky bottom-4 flex justify-end">

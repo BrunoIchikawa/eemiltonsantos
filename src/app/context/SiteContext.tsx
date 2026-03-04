@@ -43,7 +43,13 @@ interface SiteContextType {
 // Default empty state to prevent null checks everywhere before data loads
 const defaultState: SiteData = {
   general: {
-    schoolName: '', phone: '', whatsapp: '', emailSecretaria: '', emailDiretoria: '', address: '', mapUrl: '', socials: [], footerText: ''
+    schoolName: '', phone: '', whatsapp: '', emailSecretaria: '', emailDiretoria: '', address: '', mapUrl: '', socials: [], footerText: '',
+    dropdownOptions: {
+      projectCategories: ['Sustentabilidade', 'Tecnologia', 'Artes e Cultura', 'Esportes', 'Ciências', 'Geral'],
+      galleryCategories: ['Eventos', 'Trabalhos de Alunos', 'Estrutura da Escola', 'Passeios Culturais', 'Geral'],
+      eventCategories: ['Seminário', 'Apresentação', 'Competição Esportiva', 'Festa Escolar', 'Geral'],
+      awardCategories: ['Acadêmico', 'Esportivo', 'Artístico', 'Sustentabilidade', 'Geral']
+    }
   },
   home: {
     heroTitle: '', heroSubtitle: '', heroImage: '', welcomeTitle: '', welcomeText: '', warnings: [],
