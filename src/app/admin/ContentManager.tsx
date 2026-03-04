@@ -476,13 +476,23 @@ export function ContentManager({ section }: ContentManagerProps) {
                 {section !== 'eventos' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                  <input
-                    type="text"
-                    value={editingItem.category || ''}
+                  <select
+                    value={editingItem.category || (section === 'premios' ? 'Acadêmico' : 'Geral')}
                     onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7BA6] outline-none"
-                    placeholder={section === 'premios' ? 'Ex: Acadêmico, Esportivo' : 'Categoria...'}
-                  />
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7BA6] outline-none bg-white"
+                  >
+                    {(() => {
+                      let options: string[] = [];
+                      if (section === 'projetos') {
+                        options = data.general.dropdownOptions?.projectCategories || ['Geral'];
+                      } else if (section === 'premios') {
+                        options = data.general.dropdownOptions?.awardCategories || ['Acadêmico', 'Geral'];
+                      }
+                      
+                      const safeOptions = options.length > 0 ? options : ['Geral'];
+                      return safeOptions.map(cat => <option key={cat} value={cat}>{cat}</option>);
+                    })()}
+                  </select>
                 </div>
                 )}
 

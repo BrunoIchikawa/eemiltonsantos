@@ -51,11 +51,19 @@ export function PopupDisplay() {
                 <X className="w-8 h-8 md:w-6 md:h-6" />
               </button>
 
-              <img 
-                src={currentPopup.imageUrl} 
-                alt={currentPopup.title} 
-                className="w-auto h-auto max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl" 
-              />
+              <div className="w-full flex items-center justify-center bg-black/40 rounded-lg shadow-2xl relative overflow-hidden aspect-video md:aspect-auto md:h-[70vh]">
+                <img 
+                  src={currentPopup.imageUrl} 
+                  alt={currentPopup.title} 
+                  className="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-125"
+                  aria-hidden="true"
+                />
+                <img 
+                  src={currentPopup.imageUrl} 
+                  alt={currentPopup.title} 
+                  className="w-full h-full object-contain relative z-10" 
+                />
+              </div>
               
               {/* Contador (Opcional) */}
               {activePopups.length > 1 && (
