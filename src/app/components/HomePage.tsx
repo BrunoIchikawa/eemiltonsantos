@@ -131,7 +131,7 @@ export function HomePage() {
                       <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                         {slide.button1?.active && (
                           <button
-                            onClick={() => onNavigate(slide.button1!.link)}
+                            onClick={() => slide.button1!.isExternal ? window.open(slide.button1!.link, '_blank') : onNavigate(slide.button1!.link)}
                             className="group relative bg-white text-gray-900 px-6 py-3 sm:px-8 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all duration-300 hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2 sm:gap-3 overflow-hidden w-full sm:w-auto active:scale-95"
                           >
                             <span className="relative z-10 tracking-tight whitespace-nowrap">{slide.button1.text}</span>
@@ -141,7 +141,7 @@ export function HomePage() {
 
                         {slide.button2?.active && (
                           <button
-                            onClick={() => onNavigate(slide.button2!.link)}
+                            onClick={() => slide.button2!.isExternal ? window.open(slide.button2!.link, '_blank') : onNavigate(slide.button2!.link)}
                             className="group bg-white/10 backdrop-blur-md border border-white/30 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium text-base sm:text-lg transition-all duration-300 hover:bg-white/20 hover:border-white/50 shadow-lg flex items-center justify-center gap-2 sm:gap-3 w-full sm:w-auto active:bg-white/15"
                           >
                             <Calendar className="w-4 h-4 sm:w-5 sm:h-5 opacity-80" />

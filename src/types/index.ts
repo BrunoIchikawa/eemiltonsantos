@@ -17,6 +17,12 @@ export interface GeneralSettings {
   businessHours?: string;
   pageBanners?: Record<string, { title: string; subtitle: string }>;
   organogram?: { id: string; role: string; name: string; parentId?: string | null }[];
+  dropdownOptions?: {
+    projectCategories: string[];
+    galleryCategories: string[];
+    eventCategories: string[];
+    awardCategories: string[];
+  };
 }
 
 export interface TeamMember {
@@ -119,6 +125,7 @@ export interface SlideButton {
   text: string;
   link: string; // internal route or external url
   active: boolean;
+  isExternal?: boolean;
 }
 
 export interface Slide {

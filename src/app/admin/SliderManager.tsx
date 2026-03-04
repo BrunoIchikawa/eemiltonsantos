@@ -230,15 +230,26 @@ export function SliderManager() {
               <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-gray-700">Botão Principal (Branco)</span>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.button1?.active}
-                      onChange={e => handleButtonChange('button1', 'active', e.target.checked)}
-                      className="w-4 h-4 text-[#0099DD] rounded"
-                    />
-                    <span className="text-xs text-gray-600">Ativar</span>
-                  </label>
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.button1?.isExternal || false}
+                        onChange={e => handleButtonChange('button1', 'isExternal', e.target.checked)}
+                        className="w-4 h-4 text-[#0099DD] rounded"
+                      />
+                      <span className="text-xs text-gray-600">Link Externo</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.button1?.active}
+                        onChange={e => handleButtonChange('button1', 'active', e.target.checked)}
+                        className="w-4 h-4 text-[#0099DD] rounded"
+                      />
+                      <span className="text-xs text-gray-600">Ativar</span>
+                    </label>
+                  </div>
                 </div>
 
                 {formData.button1?.active && (
@@ -250,15 +261,25 @@ export function SliderManager() {
                       className="p-2 border border-gray-300 rounded-md text-sm"
                       placeholder="Texto do botão"
                     />
-                    <select
-                      value={formData.button1.link}
-                      onChange={e => handleButtonChange('button1', 'link', e.target.value)}
-                      className="p-2 border border-gray-300 rounded-md text-sm bg-white"
-                    >
-                      {availableRoutes.map(route => (
-                        <option key={route.value} value={route.value}>{route.label}</option>
-                      ))}
-                    </select>
+                    {formData.button1.isExternal ? (
+                      <input
+                        type="text"
+                        value={formData.button1.link}
+                        onChange={e => handleButtonChange('button1', 'link', e.target.value)}
+                        className="p-2 border border-gray-300 rounded-md text-sm bg-white"
+                        placeholder="https://..."
+                      />
+                    ) : (
+                      <select
+                        value={formData.button1.link}
+                        onChange={e => handleButtonChange('button1', 'link', e.target.value)}
+                        className="p-2 border border-gray-300 rounded-md text-sm bg-white"
+                      >
+                        {availableRoutes.map(route => (
+                          <option key={route.value} value={route.value}>{route.label}</option>
+                        ))}
+                      </select>
+                    )}
                   </div>
                 )}
               </div>
@@ -267,15 +288,26 @@ export function SliderManager() {
               <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-gray-700">Botão Secundário (Transparente)</span>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.button2?.active}
-                      onChange={e => handleButtonChange('button2', 'active', e.target.checked)}
-                      className="w-4 h-4 text-[#0099DD] rounded"
-                    />
-                    <span className="text-xs text-gray-600">Ativar</span>
-                  </label>
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.button2?.isExternal || false}
+                        onChange={e => handleButtonChange('button2', 'isExternal', e.target.checked)}
+                        className="w-4 h-4 text-[#0099DD] rounded"
+                      />
+                      <span className="text-xs text-gray-600">Link Externo</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.button2?.active}
+                        onChange={e => handleButtonChange('button2', 'active', e.target.checked)}
+                        className="w-4 h-4 text-[#0099DD] rounded"
+                      />
+                      <span className="text-xs text-gray-600">Ativar</span>
+                    </label>
+                  </div>
                 </div>
 
                 {formData.button2?.active && (
@@ -287,15 +319,25 @@ export function SliderManager() {
                       className="p-2 border border-gray-300 rounded-md text-sm"
                       placeholder="Texto do botão"
                     />
-                    <select
-                      value={formData.button2.link}
-                      onChange={e => handleButtonChange('button2', 'link', e.target.value)}
-                      className="p-2 border border-gray-300 rounded-md text-sm bg-white"
-                    >
-                      {availableRoutes.map(route => (
-                        <option key={route.value} value={route.value}>{route.label}</option>
-                      ))}
-                    </select>
+                    {formData.button2.isExternal ? (
+                      <input
+                        type="text"
+                        value={formData.button2.link}
+                        onChange={e => handleButtonChange('button2', 'link', e.target.value)}
+                        className="p-2 border border-gray-300 rounded-md text-sm bg-white"
+                        placeholder="https://..."
+                      />
+                    ) : (
+                      <select
+                        value={formData.button2.link}
+                        onChange={e => handleButtonChange('button2', 'link', e.target.value)}
+                        className="p-2 border border-gray-300 rounded-md text-sm bg-white"
+                      >
+                        {availableRoutes.map(route => (
+                          <option key={route.value} value={route.value}>{route.label}</option>
+                        ))}
+                      </select>
+                    )}
                   </div>
                 )}
               </div>
