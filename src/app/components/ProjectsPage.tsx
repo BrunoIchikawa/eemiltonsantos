@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ImageWithFallback } from './ui_elements/ImageWithFallback';
+import { ZoomableImage } from './ui_elements/ZoomableImage';
 import { useSiteData } from '../context/SiteContext';
 import { X, Calendar, Users, User } from 'lucide-react';
 
@@ -31,10 +32,9 @@ export function ProjectsPage() {
 
             <div className="p-8 sm:p-12 space-y-8">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-md">
-                <ImageWithFallback
+                <ZoomableImage
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  className="w-full h-full object-cover"
                 />
               </div>
 
@@ -115,10 +115,11 @@ export function ProjectsPage() {
                 className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-border flex flex-col hover:-translate-y-1"
               >
                 <div className="aspect-[4/3] overflow-hidden relative bg-gray-100">
-                  <ImageWithFallback
+                  <ZoomableImage
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    disableLightbox={true}
+                    className="group-hover:scale-110 transition-transform duration-500"
                   />
                   {project.category && (
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-foreground shadow-sm text-gray-800">

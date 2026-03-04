@@ -1,6 +1,6 @@
 import { Award as AwardIcon, Trophy, Star } from 'lucide-react';
 import { useSiteData } from '../context/SiteContext';
-import { ImageWithFallback } from './ui_elements/ImageWithFallback';
+import { ZoomableImage } from './ui_elements/ZoomableImage';
 
 export function AwardsSection() {
   const { data } = useSiteData();
@@ -27,10 +27,10 @@ export function AwardsSection() {
             <div key={award.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 group flex flex-col h-full">
               <div className="h-48 relative overflow-hidden bg-gray-100">
                 {award.image ? (
-                  <ImageWithFallback 
+                  <ZoomableImage 
                     src={award.image} 
                     alt={award.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full">
