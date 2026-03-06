@@ -103,21 +103,62 @@ export function CalendarPage() {
           </div>
 
           {/* Chips de Eventos */}
-          <div className="flex-1 flex flex-col gap-1 overflow-hidden">
+          <div className="flex-1 flex flex-col gap-1 mt-1 z-10 w-full overflow-hidden">
             {dayEvents.slice(0, 3).map((evt: Event) => {
               const theme = getEventThemes(evt.audience);
+              const evtStart = parseDate(evt.date);
+              const evtEnd = evt.endDate ? parseDate(evt.endDate) : evtStart;
+              
+              // Zera horas para comparação segura de dias
+              const startOnlyDate = new Date(evtStart.getFullYear(), evtStart.getMonth(), evtStart.getDate()).getTime();
+              const endOnlyDate = new Date(evtEnd.getFullYear(), evtEnd.getMonth(), evtEnd.getDate()).getTime();
+              const currentOnlyDate = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate()).getTime();
+  
+              const isStart = currentOnlyDate === startOnlyDate;
+              const isEnd = currentOnlyDate === endOnlyDate;
+              const isMiddle = currentOnlyDate > startOnlyDate && currentOnlyDate < endOnlyDate;
+              const isSingleDay = isStart && isEnd;
+  
+              // Classes Base
+              let marginClasses = 'mx-0.5 sm:mx-1';
+              let roundedClasses = 'rounded';
+              let borderClasses = 'border';
+  
+              // Lógica da Fita (Ribbon)
+              if (!isSingleDay) {
+                if (isStart) {
+                  marginClasses = 'ml-0.5 sm:ml-1 mr-[-10px] sm:mr-[-12px] relative z-20';
+                  roundedClasses = 'rounded-l rounded-r-none';
+                  borderClasses = 'border border-r-0';
+                } else if (isEnd) {
+                  marginClasses = 'mr-0.5 sm:mr-1 ml-[-10px] sm:ml-[-12px] relative z-20';
+                  roundedClasses = 'rounded-r rounded-l-none';
+                  borderClasses = 'border border-l-0';
+                } else if (isMiddle) {
+                  marginClasses = 'mx-[-10px] sm:mx-[-12px] relative z-10'; // Atravessa as bordas
+                  roundedClasses = 'rounded-none';
+                  borderClasses = 'border-y border-x-0';
+                }
+              }
+  
+              // Decide se mostra o texto
+              const showText = isStart || (isMiddle && dayDate.getDay() === 0);
+  
               return (
                 <div 
                   key={evt.id} 
                   title={evt.title} 
-                  className={`text-[9px] sm:text-[10px] leading-tight px-1.5 py-1 rounded truncate border font-semibold transition-colors ${theme.light} ${theme.text} ${theme.border} group-hover:brightness-95`}
+                  className={`text-[9.5px] sm:text-[11px] leading-snug px-1.5 py-[3px] min-h-[20px] flex items-center shrink-0 shadow-sm truncate font-semibold transition-colors
+                    ${marginClasses} ${roundedClasses} ${borderClasses} ${theme.light} ${theme.text} ${theme.border} group-hover:brightness-95`}
                 >
-                  {evt.title}
+                  <span className={`truncate w-full ${showText ? '' : 'opacity-0 select-none'}`}>
+                    {evt.title}
+                  </span>
                 </div>
               );
             })}
             {dayEvents.length > 3 && (
-              <div className="text-[10px] text-gray-400 font-bold px-1 mt-0.5">
+              <div className="text-[10px] text-gray-500 font-bold px-1 mt-auto text-center w-full relative z-30">
                 +{dayEvents.length - 3} mais
               </div>
             )}
