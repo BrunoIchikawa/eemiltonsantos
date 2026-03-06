@@ -159,26 +159,21 @@ export function CalendarPage() {
                    Filtrar por Público
                  </h2>
                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { label: 'Todos', value: 'Todos', icon: Users },
-                      { label: 'Alunos', value: 'Alunos', icon: User },
-                      { label: 'Pais', value: 'Pais', icon: Users },
-                      { label: 'Geral', value: 'Geral', icon: CalendarIcon }
-                    ].map(item => {
-                      const Icon = item.icon;
-                      const isActive = filter === item.value;
+                    {['Todos', ...(data.general.dropdownOptions?.audienceCategories || ['Alunos', 'Pais e Responsáveis', 'Professores', 'Comunidade', 'Geral'])].map(category => {
+                      const Icon = category === 'Todos' ? Users : category === 'Alunos' ? User : category === 'Geral' ? CalendarIcon : Users;
+                      const isActive = filter === category;
                       return (
                         <button
-                          key={item.value}
-                          onClick={() => setFilter(item.value)}
-                          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 border ${
+                          key={category}
+                          onClick={() => setFilter(category)}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 border truncate ${
                             isActive 
                               ? 'bg-[#00A650] text-white border-[#00A650] shadow-md transform scale-[1.02]' 
                               : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                           }`}
                         >
-                          <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
-                          {item.label}
+                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                          <span className="truncate">{category}</span>
                         </button>
                       );
                     })}

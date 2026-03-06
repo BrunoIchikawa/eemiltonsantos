@@ -159,8 +159,8 @@ export function FAQManager() {
                   onChange={(e) => setEditingItem({...editingItem, category: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6] bg-white"
                 >
-                  {(data.general.dropdownOptions?.faqCategories || ['Geral']).map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
+                  {Array.from(new Set([...(data.general.dropdownOptions?.faqCategories || ['Geral']), editingItem.category].filter(Boolean))).map(cat => (
+                    <option key={cat as string} value={cat as string}>{cat as string}</option>
                   ))}
                 </select>
               </div>

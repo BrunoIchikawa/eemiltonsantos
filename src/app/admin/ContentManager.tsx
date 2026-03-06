@@ -463,8 +463,8 @@ export function ContentManager({ section }: ContentManagerProps) {
                         onChange={(e) => setEditingItem({ ...editingItem, audience: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7BA6] outline-none bg-white"
                       >
-                        {(data.general.dropdownOptions?.audienceCategories || ['Geral']).map(aud => (
-                          <option key={aud} value={aud}>{aud}</option>
+                        {Array.from(new Set([...(data.general.dropdownOptions?.audienceCategories || ['Geral']), editingItem.audience].filter(Boolean))).map(aud => (
+                          <option key={aud as string} value={aud as string}>{aud as string}</option>
                         ))}
                       </select>
                     </div>
@@ -488,8 +488,8 @@ export function ContentManager({ section }: ContentManagerProps) {
                         options = data.general.dropdownOptions?.eventCategories || ['Geral'];
                       }
                       
-                      const safeOptions = options.length > 0 ? options : ['Geral'];
-                      return safeOptions.map(cat => <option key={cat} value={cat}>{cat}</option>);
+                      const safeOptions = Array.from(new Set([...options, editingItem.category].filter(Boolean)));
+                      return safeOptions.map(cat => <option key={cat as string} value={cat as string}>{cat as string}</option>);
                     })()}
                   </select>
                 </div>
