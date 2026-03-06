@@ -118,12 +118,6 @@ npm run dev
 npm run build
 ```
 
-### Backend
-1. Crie um banco de dados MySQL e importe o arquivo `bd_script.sql`
-2. Copie `backend/config.example.php` para `backend/config.php`
-3. Preencha as credenciais do banco em `backend/config.php`
-4. Configure o servidor Apache/Nginx para servir a pasta `backend/`
-
 ### Variável de API
 No arquivo `src/services/authService.ts`, ajuste a constante `API_URL` para apontar ao seu backend local:
 ```typescript

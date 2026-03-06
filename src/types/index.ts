@@ -22,6 +22,8 @@ export interface GeneralSettings {
     galleryCategories: string[];
     eventCategories: string[];
     awardCategories: string[];
+    faqCategories: string[];
+    audienceCategories: string[];
   };
 }
 

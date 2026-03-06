@@ -48,7 +48,9 @@ const defaultState: SiteData = {
       projectCategories: ['Sustentabilidade', 'Tecnologia', 'Artes e Cultura', 'Esportes', 'Ciências', 'Geral'],
       galleryCategories: ['Eventos', 'Trabalhos de Alunos', 'Estrutura da Escola', 'Passeios Culturais', 'Geral'],
       eventCategories: ['Seminário', 'Apresentação', 'Competição Esportiva', 'Festa Escolar', 'Geral'],
-      awardCategories: ['Acadêmico', 'Esportivo', 'Artístico', 'Sustentabilidade', 'Geral']
+      awardCategories: ['Acadêmico', 'Esportivo', 'Artístico', 'Sustentabilidade', 'Geral'],
+      faqCategories: ['Geral', 'Matrícula', 'Documentação', 'Transporte', 'Alimentação', 'Uniforme', 'Pedagógico', 'Administrativo'],
+      audienceCategories: ['Geral', 'Alunos', 'Pais e Responsáveis', 'Professores', 'Comunidade']
     }
   },
   home: {

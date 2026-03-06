@@ -456,24 +456,21 @@ export function ContentManager({ section }: ContentManagerProps) {
                         />
                       </div>
                     </div>
-                    <div>
+                    <div className="col-span-full">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Público Alvo</label>
                       <select
                         value={editingItem.audience || 'Geral'}
                         onChange={(e) => setEditingItem({ ...editingItem, audience: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2E7BA6] outline-none bg-white"
                       >
-                        <option value="Geral">Geral (Todos)</option>
-                        <option value="Alunos">Alunos</option>
-                        <option value="Pais">Pais e Responsáveis</option>
-                        <option value="Professores">Professores</option>
-                        <option value="Comunidade">Comunidade</option>
+                        {(data.general.dropdownOptions?.audienceCategories || ['Geral']).map(aud => (
+                          <option key={aud} value={aud}>{aud}</option>
+                        ))}
                       </select>
                     </div>
                   </>
                 )}
 
-                {section !== 'eventos' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
                   <select
@@ -487,6 +484,8 @@ export function ContentManager({ section }: ContentManagerProps) {
                         options = data.general.dropdownOptions?.projectCategories || ['Geral'];
                       } else if (section === 'premios') {
                         options = data.general.dropdownOptions?.awardCategories || ['Acadêmico', 'Geral'];
+                      } else if (section === 'eventos') {
+                        options = data.general.dropdownOptions?.eventCategories || ['Geral'];
                       }
                       
                       const safeOptions = options.length > 0 ? options : ['Geral'];
@@ -494,7 +493,6 @@ export function ContentManager({ section }: ContentManagerProps) {
                     })()}
                   </select>
                 </div>
-                )}
 
                 <div className="col-span-full">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label>

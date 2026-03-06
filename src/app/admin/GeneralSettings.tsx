@@ -62,12 +62,12 @@ export function GeneralSettings() {
     setFormData(prev => ({ ...prev, socials: newSocials }));
   };
 
-  const handleDropdownsChange = (categoryType: 'projectCategories' | 'galleryCategories' | 'eventCategories' | 'awardCategories', value: string) => {
+  const handleDropdownsChange = (categoryType: 'projectCategories' | 'galleryCategories' | 'eventCategories' | 'awardCategories' | 'faqCategories' | 'audienceCategories', value: string) => {
     setFormData(prev => ({
       ...prev,
       dropdownOptions: {
         ...(prev.dropdownOptions || {
-          projectCategories: [], galleryCategories: [], eventCategories: [], awardCategories: []
+          projectCategories: [], galleryCategories: [], eventCategories: [], awardCategories: [], faqCategories: [], audienceCategories: []
         }),
         [categoryType]: value.split('\n').filter(v => v.trim() !== '')
       }
@@ -315,6 +315,26 @@ export function GeneralSettings() {
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
                 placeholder="Exemplo:&#10;Acadêmico&#10;Esportivo"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorias de FAQ (Dúvidas)</label>
+              <textarea
+                value={formData.dropdownOptions?.faqCategories?.join('\n') || ''}
+                onChange={(e) => handleDropdownsChange('faqCategories', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Exemplo:&#10;Matrícula&#10;Alimentação"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Público-Alvo (Calendário e Eventos)</label>
+              <textarea
+                value={formData.dropdownOptions?.audienceCategories?.join('\n') || ''}
+                onChange={(e) => handleDropdownsChange('audienceCategories', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6]"
+                placeholder="Exemplo:&#10;Alunos&#10;Pais e Responsáveis"
               />
             </div>
           </div>

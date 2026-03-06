@@ -159,15 +159,9 @@ export function FAQManager() {
                   onChange={(e) => setEditingItem({...editingItem, category: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E7BA6] bg-white"
                 >
-                  <option value="Geral">Geral</option>
-                  <option value="Sala do Futuro">Sala do Futuro</option>
-                  <option value="Matrícula">Matrícula</option>
-                  <option value="Documentação">Documentação</option>
-                  <option value="Transporte">Transporte</option>
-                  <option value="Alimentação">Alimentação</option>
-                  <option value="Uniforme">Uniforme</option>
-                  <option value="Pedagógico">Pedagógico</option>
-                  <option value="Administrativo">Administrativo</option>
+                  {(data.general.dropdownOptions?.faqCategories || ['Geral']).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
                 </select>
               </div>
 
