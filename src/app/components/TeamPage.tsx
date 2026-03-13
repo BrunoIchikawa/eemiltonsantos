@@ -62,14 +62,23 @@ export function TeamPage() {
                 );
 
                 // --- MOBILE VIEW ---
+                // Para mobile, vamos exibir apenas no "primeiro" pai para não duplicar visualmente se ele tiver vários coordenadores.
+                const getFirstParentChildren = (parentId: string | null): OrgNode[] => {
+                  return allNodes.filter(n => {
+                    const pIds = n.parentIds || (n.parentId ? [n.parentId] : []);
+                    if (parentId === null) return pIds.length === 0;
+                    return pIds[0] === parentId; 
+                  });
+                };
+
                 const renderMobileTree = (parentId: string | null, level: number): React.ReactNode => {
-                  const nodes = getChildren(parentId);
+                  const nodes = getFirstParentChildren(parentId);
                   if (nodes.length === 0) return null;
                   
                   return (
                     <div className={`flex flex-col gap-5 ${level > 0 ? 'ml-6 pl-4 border-l-2 border-slate-200 py-2' : ''}`}>
-                      {nodes.map((node, i) => (
-                        <div key={`${parentId}-${node.id}-${i}`} className="relative w-full max-w-sm">
+                      {nodes.map((node) => (
+                        <div key={node.id} className="relative w-full max-w-sm">
                           {level > 0 && <div className="absolute top-8 -left-4 w-4 h-[2px] bg-slate-200" />}
                           <div className="h-[100px]">
                             <OrgNodeCard block={node} />
@@ -81,82 +90,99 @@ export function TeamPage() {
                   );
                 };
 
-                // --- DESKTOP VIEW (SVG) ---
-                const subtreeWidthCache = new Map<string, number>();
-                const getSubtreeWidth = (nodeId: string): number => {
-                  if (subtreeWidthCache.has(nodeId)) return subtreeWidthCache.get(nodeId)!;
-                  const children = getChildren(nodeId);
-                  let w: number;
-                  if (children.length === 0) {
-                    w = NODE_W;
-                  } else {
-                    w = children.reduce((sum, c) => sum + getSubtreeWidth(c.id), 0)
-                      + GAP_X * (children.length - 1);
-                    w = Math.max(NODE_W, w);
-                  }
-                  subtreeWidthCache.set(nodeId, w);
-                  return w;
-                };
-
-                const positioned: { uniqueKey: string; x: number; y: number; node: OrgNode }[] = [];
-                const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
-
-                const layout = (nodeId: string, regionLeft: number, y: number, parentIdForUniqueKey: string | null = null) => {
-                  const node = allNodes.find(n => n.id === nodeId);
-                  if (!node) return;
-                  const regionW = getSubtreeWidth(nodeId);
-                  const nodeX = regionLeft + (regionW - NODE_W) / 2;
-                  
-                  // Chave única composta para evitar bugs do React quando o layout desenha o mesmo node 2x
-                  const uniqueKey = `${parentIdForUniqueKey}-${nodeId}-${xCounter++}`;
-                  positioned.push({ uniqueKey, x: nodeX, y, node });
-
-                  const children = getChildren(nodeId);
-                  if (children.length === 0) return;
-
-                  const childY = y + NODE_H + GAP_Y;
-                  let childLeft = regionLeft;
-                  const childrenTotalW = children.reduce((s, c) => s + getSubtreeWidth(c.id), 0)
-                    + GAP_X * (children.length - 1);
-                  if (childrenTotalW < regionW) {
-                    childLeft = regionLeft + (regionW - childrenTotalW) / 2;
-                  }
-
-                  const parentCenterX = nodeX + NODE_W / 2;
-                  const parentBottomY = y + NODE_H;
-
-                  children.forEach(child => {
-                    const childRegionW = getSubtreeWidth(child.id);
-                    const childNodeX = childLeft + (childRegionW - NODE_W) / 2;
-                    const childCenterX = childNodeX + NODE_W / 2;
-
-                    lines.push({
-                      x1: parentCenterX,
-                      y1: parentBottomY,
-                      x2: childCenterX,
-                      y2: childY,
-                    });
-
-                    layout(child.id, childLeft, childY, nodeId);
-                    childLeft += childRegionW + GAP_X;
+                // --- DESKTOP VIEW (DAG LAYOUT - NÍVEIS) ---
+                // 1. Encontrar o Nível de profundidade de cada bloco
+                const nodeLevels = new Map<string, number>();
+                let changed = true;
+                let iters = 0;
+                while (changed && iters < 100) {
+                  changed = false;
+                  iters++;
+                  allNodes.forEach(n => {
+                    const pIds = n.parentIds || (n.parentId ? [n.parentId] : []);
+                    if (pIds.length === 0) {
+                      if (nodeLevels.get(n.id) !== 0) {
+                        nodeLevels.set(n.id, 0);
+                        changed = true;
+                      }
+                    } else {
+                      let maxPLevel = -1;
+                      let allParentsResolved = true;
+                      pIds.forEach(pId => {
+                        if (nodeLevels.has(pId)) {
+                          maxPLevel = Math.max(maxPLevel, nodeLevels.get(pId)!);
+                        } else {
+                          allParentsResolved = false;
+                        }
+                      });
+                      if (allParentsResolved) {
+                        const expectedLevel = maxPLevel + 1;
+                        if (nodeLevels.get(n.id) !== expectedLevel) {
+                          nodeLevels.set(n.id, expectedLevel);
+                          changed = true;
+                        }
+                      }
+                    }
                   });
-                };
-
-                let xCounter = 0;
-                const roots = getChildren(null);
-                let currentLeft = PAD;
-                roots.forEach(root => {
-                  getSubtreeWidth(root.id);
-                  layout(root.id, currentLeft, PAD);
-                  currentLeft += getSubtreeWidth(root.id) + GAP_X;
+                }
+                
+                // Tratar blocos perdidos (loops acidentais) colocando no nível 0
+                allNodes.forEach(n => {
+                  if (!nodeLevels.has(n.id)) {
+                    nodeLevels.set(n.id, 0);
+                  }
                 });
 
-                const svgW = positioned.length > 0
-                  ? Math.max(...positioned.map(n => n.x + NODE_W)) + PAD
-                  : 400;
-                const svgH = positioned.length > 0
-                  ? Math.max(...positioned.map(n => n.y + NODE_H)) + PAD
-                  : 200;
+                // 2. Agrupar por Níveis Reais
+                const layers: OrgNode[][] = [];
+                nodeLevels.forEach((lvl, id) => {
+                  if (!layers[lvl]) layers[lvl] = [];
+                  const node = allNodes.find(n => n.id === id);
+                  if (node) layers[lvl].push(node);
+                });
+                const validLayers = layers.filter(l => l && l.length > 0);
+
+                // 3. Layout Dimensions Horizontalmente Centralizados
+                const maxLayerNodes = Math.max(...validLayers.map(l => l.length));
+                const svgW = Math.max(800, maxLayerNodes * NODE_W + (maxLayerNodes - 1) * GAP_X + PAD * 2);
+                const svgH = validLayers.length * NODE_H + (validLayers.length - 1) * GAP_Y + PAD * 2;
+
+                const positioned = new Map<string, {x: number, y: number, node: OrgNode}>();
+                const drawnLines: {x1: number, y1: number, x2: number, y2: number}[] = [];
+
+                // 4. Posicionar os Nodulos Horizontalmente por nível
+                validLayers.forEach((layerNodes, lvlIndex) => {
+                  const layerW = layerNodes.length * NODE_W + (layerNodes.length - 1) * GAP_X;
+                  let startX = (svgW - layerW) / 2;
+                  const y = PAD + lvlIndex * (NODE_H + GAP_Y);
+
+                  layerNodes.forEach((node) => {
+                    positioned.set(node.id, { x: startX, y, node });
+                    startX += NODE_W + GAP_X;
+                  });
+                });
+
+                // 5. Desenhar Linhas perfeitamente agrupadas (T Lines)
+                allNodes.forEach(node => {
+                  const pIds = node.parentIds || (node.parentId ? [node.parentId] : []);
+                  const targetPos = positioned.get(node.id);
+                  if (!targetPos) return;
+
+                  pIds.forEach(pId => {
+                    const sourcePos = positioned.get(pId);
+                    if (!sourcePos) return;
+
+                    const x1 = sourcePos.x + NODE_W / 2;
+                    const y1 = sourcePos.y + NODE_H;
+                    const x2 = targetPos.x + NODE_W / 2;
+                    const y2 = targetPos.y;
+                    
+                    // O midY comum em GAP_Y garante que Várias pernas de cima desçam e se juntem numa trilha reta única no SVG H-Line!
+                    const midY = sourcePos.y + NODE_H + GAP_Y / 2;
+
+                    drawnLines.push({ x1, y1, x2, y2, midY } as any);
+                  });
+                });
 
                 return (
                   <>
@@ -170,25 +196,22 @@ export function TeamPage() {
                           height={svgH}
                           viewBox={`0 0 ${svgW} ${svgH}`}
                           className="block mx-auto"
-                          style={{ maxWidth: `${svgW}px`, width: '100%', maxHeight: '75vh' }}
+                          style={{ maxWidth: `${svgW}px`, width: '100%', maxHeight: '80vh' }}
                         >
-                          {/* Connection lines */}
-                          {lines.map((l, i) => {
-                            const midY = l.y1 + (l.y2 - l.y1) / 2;
-                            return (
-                              <path
-                                key={`line-${i}`}
-                                d={`M${l.x1},${l.y1} V${midY} H${l.x2} V${l.y2}`}
-                                fill="none"
-                                stroke="#cbd5e1"
-                                strokeWidth="2.5"
-                                strokeLinejoin="round"
-                              />
-                            );
-                          })}
+                          {/* Connection lines DAG */}
+                          {drawnLines.map((l: any, i) => (
+                            <path
+                              key={`line-${i}`}
+                              d={`M${l.x1},${l.y1} V${l.midY} H${l.x2} V${l.y2}`}
+                              fill="none"
+                              stroke="#cbd5e1"
+                              strokeWidth="2.5"
+                              strokeLinejoin="round"
+                            />
+                          ))}
                           {/* Node boxes */}
-                          {positioned.map(({ uniqueKey, x, y, node: b }) => (
-                            <foreignObject key={uniqueKey} x={x} y={y} width={NODE_W} height={NODE_H}>
+                          {Array.from(positioned.values()).map(({ x, y, node: b }) => (
+                            <foreignObject key={b.id} x={x} y={y} width={NODE_W} height={NODE_H}>
                               <OrgNodeCard block={b} />
                             </foreignObject>
                           ))}
