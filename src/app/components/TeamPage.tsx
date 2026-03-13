@@ -29,8 +29,8 @@ export function TeamPage() {
           <div className="w-full pb-8 bg-slate-50 border border-slate-200/60 rounded-3xl p-4 sm:p-8 shadow-inner">
             {data.general.organogram && data.general.organogram.length > 0 ? (
               (() => {
-                type OrgNode = { id: string; role: string; name: string; parentId?: string | null };
-                const allNodes = data.general.organogram!;
+                type OrgNode = { id: string; role: string; name: string; parentId?: string | null; parentIds?: string[] };
+                const allNodes = data.general.organogram as OrgNode[] || [];
 
                 const NODE_W = 240;
                 const NODE_H = 100;
@@ -38,8 +38,13 @@ export function TeamPage() {
                 const GAP_Y = 54;
                 const PAD = 30;
 
-                const getChildren = (parentId: string | null): OrgNode[] =>
-                  allNodes.filter(n => (n.parentId || null) === parentId);
+                const getChildren = (parentId: string | null): OrgNode[] => {
+                  return allNodes.filter(n => {
+                    const pIds = n.parentIds || (n.parentId ? [n.parentId] : []);
+                    if (parentId === null) return pIds.length === 0;
+                    return pIds.includes(parentId);
+                  });
+                };
 
                 const OrgNodeCard = ({ block }: { block: OrgNode }) => (
                   <div className="bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] border border-slate-200/60 w-full h-full flex flex-col items-center justify-center p-3 relative overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.12)] hover:-translate-y-0.5">
@@ -63,8 +68,8 @@ export function TeamPage() {
                   
                   return (
                     <div className={`flex flex-col gap-5 ${level > 0 ? 'ml-6 pl-4 border-l-2 border-slate-200 py-2' : ''}`}>
-                      {nodes.map(node => (
-                        <div key={node.id} className="relative w-full max-w-sm">
+                      {nodes.map((node, i) => (
+                        <div key={`${parentId}-${node.id}-${i}`} className="relative w-full max-w-sm">
                           {level > 0 && <div className="absolute top-8 -left-4 w-4 h-[2px] bg-slate-200" />}
                           <div className="h-[100px]">
                             <OrgNodeCard block={node} />
@@ -93,15 +98,18 @@ export function TeamPage() {
                   return w;
                 };
 
-                const positioned: { x: number; y: number; node: OrgNode }[] = [];
+                const positioned: { uniqueKey: string; x: number; y: number; node: OrgNode }[] = [];
                 const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
 
-                const layout = (nodeId: string, regionLeft: number, y: number) => {
+                const layout = (nodeId: string, regionLeft: number, y: number, parentIdForUniqueKey: string | null = null) => {
                   const node = allNodes.find(n => n.id === nodeId);
                   if (!node) return;
                   const regionW = getSubtreeWidth(nodeId);
                   const nodeX = regionLeft + (regionW - NODE_W) / 2;
-                  positioned.push({ x: nodeX, y, node });
+                  
+                  // Chave única composta para evitar bugs do React quando o layout desenha o mesmo node 2x
+                  const uniqueKey = `${parentIdForUniqueKey}-${nodeId}-${xCounter++}`;
+                  positioned.push({ uniqueKey, x: nodeX, y, node });
 
                   const children = getChildren(nodeId);
                   if (children.length === 0) return;
@@ -129,11 +137,12 @@ export function TeamPage() {
                       y2: childY,
                     });
 
-                    layout(child.id, childLeft, childY);
+                    layout(child.id, childLeft, childY, nodeId);
                     childLeft += childRegionW + GAP_X;
                   });
                 };
 
+                let xCounter = 0;
                 const roots = getChildren(null);
                 let currentLeft = PAD;
                 roots.forEach(root => {
@@ -178,8 +187,8 @@ export function TeamPage() {
                             );
                           })}
                           {/* Node boxes */}
-                          {positioned.map(({ x, y, node: b }) => (
-                            <foreignObject key={b.id} x={x} y={y} width={NODE_W} height={NODE_H}>
+                          {positioned.map(({ uniqueKey, x, y, node: b }) => (
+                            <foreignObject key={uniqueKey} x={x} y={y} width={NODE_W} height={NODE_H}>
                               <OrgNodeCard block={b} />
                             </foreignObject>
                           ))}

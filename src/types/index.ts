@@ -16,7 +16,7 @@ export interface GeneralSettings {
   footerText: string;
   businessHours?: string;
   pageBanners?: Record<string, { title: string; subtitle: string }>;
-  organogram?: { id: string; role: string; name: string; parentId?: string | null }[];
+  organogram?: { id: string; role: string; name: string; parentId?: string | null; parentIds?: string[] }[];
   dropdownOptions?: {
     projectCategories: string[];
     galleryCategories: string[];
