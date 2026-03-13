@@ -142,27 +142,108 @@ export function TeamPage() {
                 });
                 const validLayers = layers.filter(l => l && l.length > 0);
 
-                // 3. Layout Dimensions Horizontalmente Centralizados
-                const maxLayerNodes = Math.max(...validLayers.map(l => l.length));
-                const svgW = Math.max(800, maxLayerNodes * NODE_W + (maxLayerNodes - 1) * GAP_X + PAD * 2);
-                const svgH = validLayers.length * NODE_H + (validLayers.length - 1) * GAP_Y + PAD * 2;
-
-                const positioned = new Map<string, {x: number, y: number, node: OrgNode}>();
-                const drawnLines: {x1: number, y1: number, x2: number, y2: number}[] = [];
-
-                // 4. Posicionar os Nodulos Horizontalmente por nível
-                validLayers.forEach((layerNodes, lvlIndex) => {
-                  const layerW = layerNodes.length * NODE_W + (layerNodes.length - 1) * GAP_X;
-                  let startX = (svgW - layerW) / 2;
-                  const y = PAD + lvlIndex * (NODE_H + GAP_Y);
-
-                  layerNodes.forEach((node) => {
-                    positioned.set(node.id, { x: startX, y, node });
+                // 3. Relaxação Geométrica (Barycenter Layout Iterativo)
+                const layerNodesArray = validLayers.map(l => l.map(n => ({ node: n, x: 0 })));
+                const itemMap = new Map<string, {node: OrgNode, x: number, y: number}>();
+                
+                // Distribuição inicial
+                layerNodesArray.forEach((layer) => {
+                  const layerW = layer.length * NODE_W + (layer.length - 1) * GAP_X;
+                  let startX = -layerW / 2 + NODE_W / 2;
+                  layer.forEach(item => {
+                    item.x = startX;
                     startX += NODE_W + GAP_X;
                   });
                 });
 
-                // 5. Desenhar Linhas perfeitamente agrupadas (T Lines)
+                // Evitar Overlap
+                const resolveOverlaps = (layer: {x: number}[]) => {
+                  layer.sort((a, b) => a.x - b.x);
+                  let changed = true;
+                  let loops = 0;
+                  while(changed && loops < 20) {
+                    changed = false;
+                    loops++;
+                    for (let i = 0; i < layer.length - 1; i++) {
+                      const a = layer[i];
+                      const b = layer[i + 1];
+                      const minDist = NODE_W + GAP_X;
+                      if (b.x - a.x < minDist) {
+                        const overlap = minDist - (b.x - a.x);
+                        a.x -= overlap / 2;
+                        b.x += overlap / 2;
+                        changed = true;
+                      }
+                    }
+                  }
+                };
+
+                // Iterações de força gravitacional nos Eixos X para Pais/Filhos
+                for (let iter = 0; iter < 50; iter++) {
+                  // Top-down
+                  for (let l = 1; l < layerNodesArray.length; l++) {
+                    const layer = layerNodesArray[l];
+                    layer.forEach(item => {
+                      const pIds = item.node.parentIds || (item.node.parentId ? [item.node.parentId] : []);
+                      let pSum = 0;
+                      let count = 0;
+                      pIds.forEach(pId => {
+                        const pItem = layerNodesArray.flat().find(p => p.node.id === pId);
+                        if (pItem) {
+                          pSum += pItem.x;
+                          count++;
+                        }
+                      });
+                      if (count > 0) item.x = (item.x + (pSum / count)) / 2; 
+                    });
+                    resolveOverlaps(layer);
+                  }
+                  
+                  // Bottom-up
+                  for (let l = layerNodesArray.length - 2; l >= 0; l--) {
+                    const layer = layerNodesArray[l];
+                    layer.forEach(item => {
+                      const children = layerNodesArray.flat().filter(c => {
+                         const cpIds = c.node.parentIds || (c.node.parentId ? [c.node.parentId] : []);
+                         return cpIds.includes(item.node.id);
+                      });
+                      if (children.length > 0) {
+                        let cSum = 0;
+                        children.forEach(c => cSum += c.x);
+                        item.x = (item.x + (cSum / children.length)) / 2;
+                      }
+                    });
+                    resolveOverlaps(layer);
+                  }
+                }
+
+                // 4. Bounding Box Dinâmico com Offset
+                let minX = Infinity;
+                let maxX = -Infinity;
+                layerNodesArray.flat().forEach(item => {
+                  if (item.x < minX) minX = item.x;
+                  if (item.x > maxX) maxX = item.x;
+                });
+                
+                const graphTotalWidth = (maxX - minX) + NODE_W;
+                const svgW = Math.max(800, graphTotalWidth + PAD * 2);
+                const svgH = layerNodesArray.length * NODE_H + (layerNodesArray.length - 1) * GAP_Y + PAD * 2;
+                
+                const offsetX = (svgW / 2) - ((minX + maxX) / 2);
+
+                const positioned = new Map<string, {x: number, y: number, node: OrgNode}>();
+                const drawnLines: {x1: number, y1: number, x2: number, y2: number, midY: number}[] = [];
+
+                layerNodesArray.forEach((layer, lvlIndex) => {
+                  const y = PAD + lvlIndex * (NODE_H + GAP_Y);
+                  layer.forEach(item => {
+                    const finalX = item.x + offsetX - (NODE_W / 2); // get top-left X pra foreignObject
+                    itemMap.set(item.node.id, { node: item.node, x: finalX, y });
+                    positioned.set(item.node.id, { x: finalX, y, node: item.node });
+                  });
+                });
+
+                // 5. Trilha das linhas do SVG
                 allNodes.forEach(node => {
                   const pIds = node.parentIds || (node.parentId ? [node.parentId] : []);
                   const targetPos = positioned.get(node.id);
@@ -177,9 +258,7 @@ export function TeamPage() {
                     const x2 = targetPos.x + NODE_W / 2;
                     const y2 = targetPos.y;
                     
-                    // O midY comum em GAP_Y garante que Várias pernas de cima desçam e se juntem numa trilha reta única no SVG H-Line!
                     const midY = sourcePos.y + NODE_H + GAP_Y / 2;
-
                     drawnLines.push({ x1, y1, x2, y2, midY } as any);
                   });
                 });
