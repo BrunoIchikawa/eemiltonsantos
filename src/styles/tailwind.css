@@ -1,7 +1,10 @@
 @import 'tailwindcss' source(none);
 @source '../**/*.{js,ts,jsx,tsx}';
 
-@custom-variant hover (@media (hover: hover) and (pointer: fine) { &:hover });
-@custom-variant group-hover (@media (hover: hover) and (pointer: fine) { :where(.group):hover & });
-
 @import 'tw-animate-css';
+
+/* Sticky hover fix: remove hover visual feedback on pure-touch devices globally */
+@media (hover: none) {
+  .group:hover > .group-hover\:scale-105 { transform: none; }
+  .group:hover > .group-hover\:scale-110 { transform: none; }
+}
