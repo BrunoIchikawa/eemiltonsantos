@@ -85,7 +85,7 @@ export function AboutPage() {
         {/* Conheça Nossa Escola */}
         <section>
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Conheça Nossa Escola</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-6">
              {about?.images?.map((img: string, idx: number) => {
                 // Layout logic based on original hardcoded layout
                 let colSpan = "lg:col-span-2";

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronRight, Phone, Mail, MapPin } from 'lucide-react';
+import { useSiteData } from '../context/SiteContext';
 const logoImage = '/logoMS.svg';
 
 interface HeaderProps {
@@ -15,6 +16,7 @@ interface MenuItem {
 
 export function Header({ currentPage }: HeaderProps) {
   const navigate = useNavigate();
+  const { data } = useSiteData();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -113,7 +115,7 @@ export function Header({ currentPage }: HeaderProps) {
                 <h1 className="text-sm sm:text-base font-bold leading-tight whitespace-nowrap tracking-tight">
                   E.E. Prof. Milton Santos
                 </h1>
-                <p className={`text-[10px] sm:text-xs uppercase tracking-wider font-medium opacity-80 group-hover:opacity-100`}>
+                <p className={`text-[11px] sm:text-xs uppercase tracking-wider font-medium opacity-80 group-hover:opacity-100`}>
                   Unidade Regional de Ensino Norte 1
                 </p>
               </div>
@@ -280,11 +282,16 @@ export function Header({ currentPage }: HeaderProps) {
 
           {/* Footer do Menu Mobile */}
           <div className="mt-auto pt-10 grid grid-cols-2 gap-4 animate-in slide-in-from-bottom-8 duration-700 fade-in fill-mode-forwards">
-            <a href="#" className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-2xl active:bg-gray-100 transition-colors">
+            <a href={`tel:${data?.general?.whatsapp?.replace(/\D/g, '') || ''}`} className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-2xl active:bg-gray-100 transition-colors">
               <Phone className="w-6 h-6 text-[#0099DD] mb-2" />
               <span className="text-xs font-bold text-gray-600">Ligar</span>
             </a>
-            <a href="#" className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-2xl active:bg-gray-100 transition-colors">
+            <a 
+              href={data?.general?.mapUrl || '#'}
+              target="_blank"
+              rel="noopener noreferrer" 
+              className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-2xl active:bg-gray-100 transition-colors"
+            >
               <MapPin className="w-6 h-6 text-[#0099DD] mb-2" />
               <span className="text-xs font-bold text-gray-600">Visitar</span>
             </a>

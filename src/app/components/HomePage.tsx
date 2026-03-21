@@ -116,7 +116,7 @@ export function HomePage() {
                   <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 sm:px-12 lg:px-24 pointer-events-none pb-16 sm:pb-20">
                     <div className="max-w-5xl text-left pointer-events-auto pt-12 sm:pt-0">
 
-                      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-6 text-white tracking-tighter leading-[1.1] sm:leading-[0.95] drop-shadow-2xl text-balance animate-in fade-in slide-in-from-bottom-4 duration-700">
+                      <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-6 text-white tracking-tighter leading-[1.1] sm:leading-[0.95] drop-shadow-2xl text-balance animate-in fade-in slide-in-from-bottom-4 duration-700">
                         {slide.title}
                       </h1>
 
@@ -276,7 +276,7 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <div
               onClick={() => onNavigate('equipe')}
-              className="p-8 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
+              className="p-6 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
             >
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-500">
                 <Users className="w-7 h-7 sm:w-8 sm:h-8 text-[#0099DD]" />
@@ -286,7 +286,7 @@ export function HomePage() {
             </div>
             <div
               onClick={() => onNavigate('calendario')}
-              className="p-8 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
+              className="p-6 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
             >
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-500">
                 <Calendar className="w-7 h-7 sm:w-8 sm:h-8 text-[#009B3A]" />
@@ -302,7 +302,7 @@ export function HomePage() {
                   document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="p-8 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
+              className="p-6 sm:p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-2xl transition-all cursor-pointer group active:scale-[0.98] duration-300"
             >
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-500">
                 <MapPin className="w-7 h-7 sm:w-8 sm:h-8 text-[#705741]" />

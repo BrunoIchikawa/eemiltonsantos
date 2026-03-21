@@ -45,10 +45,10 @@ export function PopupDisplay() {
               {/* Botão de Fechar (Flutuante) */}
               <button 
                 onClick={() => setCurrentIndex(prev => prev + 1)} 
-                className="absolute -top-12 right-0 md:-right-12 md:top-0 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full backdrop-blur-md transition-all z-20 border border-white/20 group-hover:scale-110"
+                className="absolute top-3 right-3 md:-right-12 md:top-0 bg-black/60 hover:bg-black/80 md:bg-white/10 md:hover:bg-white/20 text-white p-2.5 md:p-2 rounded-full backdrop-blur-md transition-all z-20 border border-white/20 shadow-lg"
                 title="Fechar"
               >
-                <X className="w-8 h-8 md:w-6 md:h-6" />
+                <X className="w-6 h-6" />
               </button>
 
               <div className="w-full flex items-center justify-center bg-black/40 rounded-lg shadow-2xl relative overflow-hidden aspect-video md:aspect-auto md:h-[70vh]">
@@ -94,7 +94,7 @@ export function PopupDisplay() {
                    </button>
                 </div>
                 
-                <div className="text-gray-600 leading-relaxed mb-8 whitespace-pre-wrap max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="text-gray-600 leading-relaxed mb-8 whitespace-pre-wrap max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar break-words">
                   {currentPopup.message}
                 </div>
     

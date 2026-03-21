@@ -81,7 +81,7 @@ export function FAQPage() {
                       
                       <div 
                         className={`transition-all duration-300 ease-in-out overflow-hidden bg-muted/30 ${
-                          openIndex === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                          openIndex === item.id ? 'max-h-[70vh] opacity-100' : 'max-h-0 opacity-0'
                         }`}
                       >
                         <div className="p-6 pt-2 text-muted-foreground leading-relaxed border-t border-border/50">

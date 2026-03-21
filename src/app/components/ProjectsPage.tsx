@@ -23,9 +23,9 @@ export function ProjectsPage() {
       <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm overflow-y-auto animate-in slide-in-from-bottom-10 duration-300">
         <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 relative pointer-events-none">
           <div className="bg-white rounded-3xl shadow-2xl pointer-events-auto overflow-hidden">
-            <button
+              <button
               onClick={() => onSelectProject(null)}
-              className="absolute top-4 right-4 bg-black/10 hover:bg-black/20 p-2 rounded-full transition-colors z-50"
+              className="absolute top-4 right-4 bg-black/10 hover:bg-black/20 p-2 rounded-full transition-colors z-50 pointer-events-auto"
             >
               <X className="w-6 h-6 text-gray-800" />
             </button>

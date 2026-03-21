@@ -77,13 +77,13 @@ export function GalleryPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
             <div className="mb-8">
               <h1 className="text-3xl sm:text-4xl font-bold mb-3">{selectedAlbum.title}</h1>
-              <div className="flex items-center gap-4 text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-muted-foreground">
+                <span className="flex items-center gap-1 text-sm">
+                  <Calendar className="w-4 h-4 shrink-0" />
                   {formatDate(selectedAlbum.date)}
                 </span>
-                <span className="flex items-center gap-1">
-                  <ImageIcon className="w-4 h-4" />
+                <span className="flex items-center gap-1 text-sm">
+                  <ImageIcon className="w-4 h-4 shrink-0" />
                   {selectedAlbum.images.length} fotos
                 </span>
                  <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
@@ -112,37 +112,54 @@ export function GalleryPage() {
 
         {/* Lightbox */}
         {lightboxIndex !== null && (
-          <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center animate-in fade-in duration-200">
+          <div 
+            className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center animate-in fade-in duration-200"
+            onTouchStart={(e) => {
+              const t = e.touches[0];
+              (e.currentTarget as any)._touchStartX = t.clientX;
+            }}
+            onTouchEnd={(e) => {
+              const startX = (e.currentTarget as any)._touchStartX;
+              if (startX === undefined) return;
+              const endX = e.changedTouches[0].clientX;
+              const diff = startX - endX;
+              if (Math.abs(diff) > 50) {
+                if (diff > 0) nextPhoto();
+                else prevPhoto();
+              }
+            }}
+          >
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2"
+              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2 z-10 bg-black/40 rounded-full backdrop-blur-sm"
               aria-label="Fechar"
             >
-              <X className="w-8 h-8" />
+              <X className="w-7 h-7" />
             </button>
 
             <button
               onClick={prevPhoto}
-              className="absolute left-4 text-white hover:text-gray-300 transition-colors p-2"
+              className="absolute left-2 sm:left-4 text-white hover:text-gray-300 transition-colors p-2 z-10 hidden sm:block"
               aria-label="Anterior"
             >
               <ChevronLeft className="w-8 h-8" />
             </button>
 
-            <div className="max-w-6xl max-h-[90vh] px-16">
+            <div className="max-w-6xl max-h-[90vh] px-2 sm:px-8 lg:px-16 w-full flex flex-col items-center">
               <ImageWithFallback
                 src={selectedAlbum.images[lightboxIndex]}
                 alt={`${selectedAlbum.title} - foto ${lightboxIndex + 1}`}
-                className="max-w-full max-h-[90vh] object-contain"
+                className="max-w-full max-h-[80vh] object-contain"
               />
-              <div className="text-white text-center mt-4">
+              <div className="text-white text-center mt-4 text-sm">
                 {lightboxIndex + 1} / {selectedAlbum.images.length}
+                <span className="text-white/50 ml-2 sm:hidden">← Deslize →</span>
               </div>
             </div>
 
             <button
               onClick={nextPhoto}
-              className="absolute right-4 text-white hover:text-gray-300 transition-colors p-2"
+              className="absolute right-2 sm:right-4 text-white hover:text-gray-300 transition-colors p-2 z-10 hidden sm:block"
               aria-label="Próxima"
             >
               <ChevronRight className="w-8 h-8" />

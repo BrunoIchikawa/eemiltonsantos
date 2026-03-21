@@ -199,7 +199,7 @@ export function CalendarPage() {
                    <Users className="w-5 h-5 text-[#00A650]" />
                    Filtrar por Público
                  </h2>
-                 <div className="grid grid-cols-2 gap-2">
+                 <div className="flex flex-wrap gap-2">
                     {['Todos', ...(data.general.dropdownOptions?.audienceCategories || ['Alunos', 'Pais e Responsáveis', 'Professores', 'Comunidade', 'Geral'])].map(category => {
                       const Icon = category === 'Todos' ? Users : category === 'Alunos' ? User : category === 'Geral' ? CalendarIcon : Users;
                       const isActive = filter === category;
@@ -288,48 +288,182 @@ export function CalendarPage() {
             <div className="lg:col-span-8 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
                
                {/* Toolbar Calendário */}
-               <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-gray-100 bg-gray-50/30">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-blue-50 text-[#2E7BA6] rounded-xl">
-                      <CalendarIcon className="w-6 h-6" />
+               <div className="p-4 sm:p-6 flex items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/30">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className="p-2 sm:p-2.5 bg-blue-50 text-[#2E7BA6] rounded-xl shrink-0">
+                      <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <h2 className="text-2xl font-black text-gray-900 capitalize" style={{ textTransform: 'capitalize' }}>
+                    <h2 className="text-lg sm:text-2xl font-black text-gray-900 capitalize truncate" style={{ textTransform: 'capitalize' }}>
                       {monthNames[currentMonth.getMonth()].toLowerCase()} <span className="text-gray-400 font-medium">{currentMonth.getFullYear()}</span>
                     </h2>
                   </div>
                   
-                  <div className="flex items-center gap-1 bg-white rounded-xl p-1 border border-gray-200 shadow-sm">
-                    <button onClick={handlePrevMonth} className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
-                      <ChevronLeft className="w-5 h-5"/>
+                  <div className="flex items-center gap-0.5 sm:gap-1 bg-white rounded-xl p-0.5 sm:p-1 border border-gray-200 shadow-sm shrink-0">
+                    <button onClick={handlePrevMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 active:bg-gray-200 rounded-lg text-gray-600 transition-colors">
+                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5"/>
                     </button>
-                    <button onClick={() => setCurrentMonth(new Date())} className="px-4 py-1.5 text-sm font-bold text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                    <button onClick={() => setCurrentMonth(new Date())} className="px-2.5 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors">
                       Hoje
                     </button>
-                    <button onClick={handleNextMonth} className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
-                      <ChevronRight className="w-5 h-5"/>
+                    <button onClick={handleNextMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 active:bg-gray-200 rounded-lg text-gray-600 transition-colors">
+                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5"/>
                     </button>
                   </div>
                </div>
 
-               {/* Grid Headers */}
-               <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50">
-                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
-                     <div key={day} className="py-3 text-center text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest">{day}</div>
-                  ))}
+               {/* ===== MOBILE: Calendário Compacto + Lista de Eventos ===== */}
+               <div className="lg:hidden">
+                 {/* Mini-Grid de Pontos (mobile) */}
+                 <div className="px-3 pt-3 pb-2">
+                   <div className="grid grid-cols-7 mb-1">
+                     {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, i) => (
+                       <div key={`mh-${i}`} className="text-center text-[10px] font-bold text-gray-400 uppercase py-1">{day}</div>
+                     ))}
+                   </div>
+                   <div className="grid grid-cols-7 gap-y-0.5">
+                     {/* Dias vazios */}
+                     {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                       <div key={`me-${i}`} className="h-9" />
+                     ))}
+                     {/* Dias reais */}
+                     {Array.from({ length: daysInMonth }).map((_, i) => {
+                       const day = i + 1;
+                       const dayDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+                       const isToday = new Date().getDate() === day && new Date().getMonth() === currentMonth.getMonth() && new Date().getFullYear() === currentMonth.getFullYear();
+                       const dayEvts = activeEvents.filter((e: Event) => {
+                         const s = parseDate(e.date);
+                         const en = e.endDate ? parseDate(e.endDate) : s;
+                         return dayDate >= s && dayDate <= en;
+                       });
+                       const hasEvt = dayEvts.length > 0;
+                       // Cor do ponto dominante
+                       const dotTheme = hasEvt ? getEventThemes(dayEvts[0].audience) : null;
+
+                       return (
+                         <button
+                           key={`md-${day}`}
+                           onClick={() => handleDayClick(dayDate, dayEvts)}
+                           className={`
+                             h-9 flex flex-col items-center justify-center rounded-lg transition-all relative
+                             ${isToday ? 'bg-[#00A650] text-white font-black shadow-sm' : 'text-gray-700'}
+                             ${hasEvt && !isToday ? 'font-bold' : ''}
+                             active:scale-90
+                           `}
+                         >
+                           <span className="text-xs leading-none">{day}</span>
+                           {hasEvt && (
+                             <div className="flex gap-0.5 mt-0.5">
+                               {dayEvts.slice(0, 3).map((evt, j) => {
+                                 const t = getEventThemes(evt.audience);
+                                 return <div key={j} className={`w-1 h-1 rounded-full ${isToday ? 'bg-white/80' : t.bg}`} />;
+                               })}
+                             </div>
+                           )}
+                         </button>
+                       );
+                     })}
+                   </div>
+                 </div>
+
+                 {/* Lista de Eventos do Mês (mobile) */}
+                 <div className="border-t border-gray-100 p-4 space-y-3">
+                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                     <Clock className="w-3.5 h-3.5" />
+                     Eventos de {monthNames[currentMonth.getMonth()].toLowerCase()}
+                   </h3>
+                   {(() => {
+                     // Eventos do mês atual, agrupados por data de início
+                     const monthEvents = activeEvents.filter((e: Event) => {
+                       const s = parseDate(e.date);
+                       const en = e.endDate ? parseDate(e.endDate) : s;
+                       const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+                       const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+                       return en >= monthStart && s <= monthEnd;
+                     }).sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
+
+                     if (monthEvents.length === 0) {
+                       return (
+                         <div className="text-center py-6 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                           <p className="text-gray-400 text-sm">Nenhum evento neste mês.</p>
+                         </div>
+                       );
+                     }
+
+                     return monthEvents.map((evt: Event) => {
+                       const theme = getEventThemes(evt.audience);
+                       const [d, m] = evt.date.split('/');
+                       const hasRange = evt.endDate && evt.endDate !== evt.date;
+                       return (
+                         <button
+                           key={evt.id}
+                           onClick={() => {
+                             const s = parseDate(evt.date);
+                             setSelectedDateEvents({
+                               date: evt.date,
+                               events: [evt]
+                             });
+                           }}
+                           className="w-full flex gap-3 bg-gray-50 hover:bg-white active:bg-gray-100 rounded-xl p-3 border border-transparent hover:border-gray-200 transition-all text-left"
+                         >
+                           <div className={`shrink-0 w-12 h-12 rounded-lg flex flex-col items-center justify-center border ${theme.light} ${theme.border} ${theme.text}`}>
+                             <span className="text-base font-black leading-none">{d}</span>
+                             <span className="text-[9px] font-bold uppercase">{monthNames[parseInt(m) - 1].substring(0, 3)}</span>
+                           </div>
+                           <div className="flex-1 min-w-0 flex flex-col justify-center">
+                             <h4 className="font-bold text-gray-900 text-sm truncate">{evt.title}</h4>
+                             <div className="flex items-center gap-2 mt-0.5">
+                               <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${theme.light} ${theme.text}`}>
+                                 {evt.audience || 'Geral'}
+                               </span>
+                               {hasRange && (
+                                 <span className="text-[10px] text-gray-400 font-medium">Até {evt.endDate!.substring(0, 5)}</span>
+                               )}
+                               {(evt.startTime) && (
+                                 <span className="text-[10px] text-gray-400 flex items-center gap-0.5">
+                                   <Clock className="w-2.5 h-2.5" /> {evt.startTime}
+                                 </span>
+                               )}
+                             </div>
+                           </div>
+                           <ChevronRight className="w-4 h-4 text-gray-300 shrink-0 self-center" />
+                         </button>
+                       );
+                     });
+                   })()}
+                 </div>
+
+                 {/* Legenda Mobile */}
+                 <div className="bg-gray-50 p-3 border-t border-gray-200 flex flex-wrap justify-center gap-3 text-[10px] font-semibold text-gray-500 uppercase">
+                   <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-blue-500"></div> Alunos</div>
+                   <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> Pais</div>
+                   <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-purple-500"></div> Profs</div>
+                   <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-orange-500"></div> Comu.</div>
+                   <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#00A650]"></div> Geral</div>
+                 </div>
                </div>
 
-               {/* Grid Body */}
-               <div className="grid grid-cols-7 bg-white">
-                  {renderCalendarGrid()}
-               </div>
-               
-               {/* Legenda Discreta */}
-               <div className="bg-gray-50 p-4 border-t border-gray-200 flex flex-wrap justify-center sm:justify-start gap-4 text-[10px] sm:text-xs font-semibold text-gray-500 uppercase">
-                 <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-blue-500"></div> Alunos</div>
-                 <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-emerald-500"></div> Pais</div>
-                 <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-purple-500"></div> Profs</div>
-                 <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-orange-500"></div> Comu.</div>
-                 <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-[#00A650]"></div> Geral</div>
+               {/* ===== DESKTOP: Calendário Grid Completo ===== */}
+               <div className="hidden lg:flex flex-col">
+                 {/* Grid Headers */}
+                 <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50">
+                    {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+                       <div key={day} className="py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-widest">{day}</div>
+                    ))}
+                 </div>
+
+                 {/* Grid Body */}
+                 <div className="grid grid-cols-7 bg-white">
+                    {renderCalendarGrid()}
+                 </div>
+                 
+                 {/* Legenda Desktop */}
+                 <div className="bg-gray-50 p-4 border-t border-gray-200 flex flex-wrap justify-start gap-4 text-xs font-semibold text-gray-500 uppercase">
+                   <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-blue-500"></div> Alunos</div>
+                   <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-emerald-500"></div> Pais</div>
+                   <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-purple-500"></div> Profs</div>
+                   <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-orange-500"></div> Comu.</div>
+                   <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-sm bg-[#00A650]"></div> Geral</div>
+                 </div>
                </div>
 
             </div>

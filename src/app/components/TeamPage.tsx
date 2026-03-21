@@ -62,7 +62,7 @@ export function TeamPage() {
                 );
 
                 // --- MOBILE VIEW ---
-                // Para mobile, vamos exibir apenas no "primeiro" pai para não duplicar visualmente se ele tiver vários coordenadores.
+                // Flat level-based layout to prevent horizontal overflow on small screens
                 const getFirstParentChildren = (parentId: string | null): OrgNode[] => {
                   return allNodes.filter(n => {
                     const pIds = n.parentIds || (n.parentId ? [n.parentId] : []);
@@ -71,21 +71,57 @@ export function TeamPage() {
                   });
                 };
 
-                const renderMobileTree = (parentId: string | null, level: number): React.ReactNode => {
-                  const nodes = getFirstParentChildren(parentId);
-                  if (nodes.length === 0) return null;
+                // Build flat ordered list with levels (BFS)
+                const buildMobileList = () => {
+                  const result: { node: OrgNode; level: number }[] = [];
+                  const queue: { parentId: string | null; level: number }[] = [{ parentId: null, level: 0 }];
+                  const visited = new Set<string>();
                   
+                  while (queue.length > 0) {
+                    const { parentId, level } = queue.shift()!;
+                    const children = getFirstParentChildren(parentId);
+                    children.forEach(child => {
+                      if (!visited.has(child.id)) {
+                        visited.add(child.id);
+                        result.push({ node: child, level });
+                        queue.push({ parentId: child.id, level: level + 1 });
+                      }
+                    });
+                  }
+                  return result;
+                };
+
+                const mobileList = buildMobileList();
+
+                const renderMobileOrg = () => {
+                  if (mobileList.length === 0) return null;
                   return (
-                    <div className={`flex flex-col gap-5 ${level > 0 ? 'ml-6 pl-4 border-l-2 border-slate-200 py-2' : ''}`}>
-                      {nodes.map((node) => (
-                        <div key={node.id} className="relative w-full max-w-sm">
-                          {level > 0 && <div className="absolute top-8 -left-4 w-4 h-[2px] bg-slate-200" />}
-                          <div className="h-[100px]">
-                            <OrgNodeCard block={node} />
+                    <div className="flex flex-col gap-2 w-full">
+                      {mobileList.map(({ node, level }) => {
+                        // Cap indentation: max 3 levels deep visually, 16px per level
+                        const indent = Math.min(level, 3) * 16;
+                        return (
+                          <div key={node.id} className="relative w-full" style={{ paddingLeft: `${indent}px` }}>
+                            {level > 0 && (
+                              <div 
+                                className="absolute top-1/2 -translate-y-1/2 w-3 h-[2px] bg-slate-300" 
+                                style={{ left: `${indent - 12}px` }}
+                              />
+                            )}
+                            <div className="bg-white rounded-lg shadow-sm border border-slate-200/60 p-2.5 flex items-center gap-2.5 overflow-hidden">
+                              <div className="w-1 self-stretch bg-primary rounded-full shrink-0"></div>
+                              <div className="min-w-0 flex-1">
+                                <div className="font-bold text-[13px] text-slate-800 leading-tight truncate">
+                                  {node.role}
+                                </div>
+                                <div className="text-[11px] font-semibold text-primary truncate mt-0.5">
+                                  {node.name}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          {renderMobileTree(node.id, level + 1)}
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   );
                 };
@@ -266,7 +302,7 @@ export function TeamPage() {
                 return (
                   <>
                     <div className="block lg:hidden w-full px-2">
-                      {renderMobileTree(null, 0)}
+                      {renderMobileOrg()}
                     </div>
                     <div className="hidden lg:block w-full overflow-x-auto pb-6">
                       <div className="flex justify-center min-w-max mx-auto px-4">
@@ -324,7 +360,7 @@ export function TeamPage() {
                   key={member.id}
                   className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
                 >
-                  <div className="aspect-video bg-muted relative overflow-hidden">
+                  <div className="aspect-[4/3] sm:aspect-video bg-muted relative overflow-hidden">
                     <ImageWithFallback
                       src={member.photo}
                       alt={member.name}
@@ -332,8 +368,8 @@ export function TeamPage() {
                     />
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-                    <div className="text-primary font-semibold mb-3">{member.role}</div>
+                    <h3 className="text-lg sm:text-xl font-bold mb-1 truncate">{member.name}</h3>
+                    <div className="text-primary font-semibold mb-3 text-sm sm:text-base truncate">{member.role}</div>
                     <p className="text-sm text-muted-foreground">
                       {member.description}
                     </p>
