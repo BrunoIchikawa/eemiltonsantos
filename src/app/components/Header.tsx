@@ -25,6 +25,8 @@ export function Header({ currentPage }: HeaderProps) {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      // Fechar dropdowns desktop ao rolar
+      setOpenSubmenu(null);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);

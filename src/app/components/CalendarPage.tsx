@@ -148,7 +148,7 @@ export function CalendarPage() {
                 <div 
                   key={evt.id} 
                   title={evt.title} 
-                  className={`text-[9.5px] sm:text-[11px] leading-snug px-1.5 py-[3px] min-h-[20px] flex items-center shrink-0 shadow-sm truncate font-semibold transition-colors
+                  className={`text-[9.5px] sm:text-[11px] leading-snug px-2 py-[3px] min-h-[20px] min-w-0 flex items-center shrink-0 shadow-sm truncate font-semibold transition-colors
                     ${marginClasses} ${roundedClasses} ${borderClasses} ${theme.light} ${theme.text} ${theme.border} group-hover:brightness-95`}
                 >
                   <span className={`truncate w-full ${showText ? '' : 'opacity-0 select-none'}`}>

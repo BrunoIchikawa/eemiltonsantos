@@ -131,7 +131,7 @@ export function ProjectsPage() {
                   <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors text-gray-900 group-hover:text-[#00A650]">
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-1 text-gray-600">
+                  <p className="text-muted-foreground text-sm line-clamp-2 mb-4 flex-1 text-gray-600">
                     {project.description || 'Sem descrição.'}
                   </p>
                   <div className="pt-4 border-t border-border flex items-center justify-between text-sm border-gray-100">
