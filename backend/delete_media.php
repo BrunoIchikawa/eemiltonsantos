@@ -41,8 +41,12 @@ if ($result && $result->num_rows > 0) {
 
     $deleteSql = "DELETE FROM media WHERE id = '$id'";
     if ($conn->query($deleteSql) === TRUE) {
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        $uploadsDir = realpath(__DIR__ . '/uploads/');
+        $filePathReal = realpath(__DIR__ . $row['file_path']);
+        
+        // Anti Directory Traversal: Só deleta se o caminho final estiver dentro de /uploads/
+        if ($filePathReal !== false && strpos($filePathReal, $uploadsDir) === 0) {
+            unlink($filePathReal);
         }
         echo json_encode(["success" => true, "message" => "Mídia deletada"]);
     } else {

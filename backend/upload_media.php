@@ -48,7 +48,22 @@ $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm'];
 
 if (!in_array($fileExtension, $allowedTypes)) {
     http_response_code(400);
-    echo json_encode(["success" => false, "message" => "Tipo de arquivo não permitido"]);
+    echo json_encode(["success" => false, "message" => "Extensão de arquivo não permitida"]);
+    exit();
+}
+
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mime = finfo_file($finfo, $file["tmp_name"]);
+finfo_close($finfo);
+
+$allowedMimeTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'video/mp4', 'video/webm'
+];
+
+if (!in_array($mime, $allowedMimeTypes)) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "message" => "Alerta de Segurança: Assinatura do arquivo inváĺida ou maliciosa (MIME mismatch). Acesso negado."]);
     exit();
 }
 
