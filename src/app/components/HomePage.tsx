@@ -167,8 +167,10 @@ export function HomePage() {
             0% { transform: scale(1); }
             100% { transform: scale(1.15); }
           }
-          .animate-ken-burns {
-            animation: ken-burns 25s ease-out infinite alternate;
+          @media (prefers-reduced-motion: no-preference) {
+            .animate-ken-burns {
+              animation: ken-burns 25s ease-out infinite alternate;
+            }
           }
           .slick-dots li.slick-active div {
             background-color: white !important;

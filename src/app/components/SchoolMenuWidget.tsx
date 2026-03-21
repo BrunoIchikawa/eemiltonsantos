@@ -92,7 +92,8 @@ export function SchoolMenuWidget() {
                initial={{ scale: 0.9, opacity: 0 }}
                animate={{ scale: 1, opacity: 1 }}
                exit={{ scale: 0.9, opacity: 0 }}
-               className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col relative shadow-2xl"
+               className="bg-white rounded-2xl w-full max-w-5xl overflow-hidden flex flex-col relative shadow-2xl"
+               style={{ maxHeight: 'min(90vh, calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 2rem))' }}
              >
                 <div className="p-4 border-b flex justify-between items-center bg-gray-50">
                    <div className="flex items-center gap-3">

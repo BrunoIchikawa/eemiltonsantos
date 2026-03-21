@@ -42,10 +42,11 @@ export function PopupDisplay() {
           {isImage ? (
             // Layout de Imagem (Banner/Folder)
             <div className="relative w-full flex flex-col items-center group">
-              {/* Botão de Fechar (Flutuante) */}
+              {/* Botão de Fechar com Safe Area */}
               <button 
                 onClick={() => setCurrentIndex(prev => prev + 1)} 
-                className="absolute top-3 right-3 md:-right-12 md:top-0 bg-black/60 hover:bg-black/80 md:bg-white/10 md:hover:bg-white/20 text-white p-2.5 md:p-2 rounded-full backdrop-blur-md transition-all z-20 border border-white/20 shadow-lg"
+                className="absolute right-3 md:-right-12 md:top-0 bg-black/60 hover:bg-black/80 md:bg-white/10 md:hover:bg-white/20 text-white p-2.5 md:p-2 rounded-full backdrop-blur-md transition-all z-20 border border-white/20 shadow-lg"
+                style={{ top: 'max(0.75rem, env(safe-area-inset-top))' }}
                 title="Fechar"
               >
                 <X className="w-6 h-6" />

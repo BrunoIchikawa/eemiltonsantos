@@ -214,9 +214,9 @@ export function Header({ currentPage }: HeaderProps) {
           }`}
         style={{ top: 0 }}
       >
-        <div className="flex flex-col h-full pt-28 pb-8 px-6 overflow-y-auto">
+        <div className="flex flex-col h-full overflow-y-auto" style={{ paddingTop: 'max(7rem, env(safe-area-inset-top) + 4rem)', paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
 
-          <div className="flex flex-col gap-1 w-full animate-in slide-in-from-bottom-4 duration-500 fade-in fill-mode-forwards">
+          <div className="flex flex-col gap-1 w-full animate-in slide-in-from-bottom-4 duration-500 fade-in fill-mode-forwards my-auto">
             {menuItems.map((item, idx) => {
               const isActive = currentPage === item.id || item.subItems?.some(sub => sub.id === currentPage);
 

@@ -1,4 +1,7 @@
 @import 'tailwindcss' source(none);
 @source '../**/*.{js,ts,jsx,tsx}';
 
+@custom-variant hover (@media (hover: hover) and (pointer: fine) { &:hover });
+@custom-variant group-hover (@media (hover: hover) and (pointer: fine) { :where(.group):hover & });
+
 @import 'tw-animate-css';

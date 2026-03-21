@@ -131,7 +131,8 @@ export function GalleryPage() {
           >
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2 z-10 bg-black/40 rounded-full backdrop-blur-sm"
+              className="absolute right-4 text-white hover:text-gray-300 transition-colors p-2 z-10 bg-black/40 rounded-full backdrop-blur-sm"
+              style={{ top: 'max(1rem, env(safe-area-inset-top))' }}
               aria-label="Fechar"
             >
               <X className="w-7 h-7" />
